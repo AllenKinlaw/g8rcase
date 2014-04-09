@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.js"></script>
+<script type="text/javascript">
+$(function(){
+$('#nav a').click(function(e) {
+$('#content').hide().load( $(this).attr('href') , function(){
+$('#content').show()
+})
+return false
+})
+})
+</script>
+<style type="text/css">
+</style>
+<title>content</title>
+</head>
+<body>
+<body>
+<div id="nav">
+<a href="index1.html">home</a>
+<a href="why.html">why</a>
+<a href="story.html">a story</a>
+<a href="pic.html">a picture</a>
+</div>
+<div id="content">duh
+</div>
+</body>
+</html> 
