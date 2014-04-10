@@ -238,6 +238,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'ftype' => 'text',                
                 'class'=> 'form-control',                
                 'js'=>'',
+                'rules' => 'required',
             ),
             'NAME' =>
             array(
@@ -246,6 +247,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'ftype' => 'text',                
                 'class'=> 'form-control',                
                 'js'=>'',
+               'rules' => 'required',
             ),
             'CTYPE' =>
             array(
@@ -255,6 +257,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'id' => 'G8R_CTYPE_ID_C',
                 'ftype' => 'popup',
                 'popuptab' => 'g8r_ctype',
+                'rules' => 'required',
             ),
             'TAGS' =>
             array(
@@ -263,6 +266,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'ftype' => 'text',                
                 'class'=> 'form-control',                
                 'js'=>'',
+                'rules' => 'required',
             ),
             'STATUS' =>
             array(
@@ -270,6 +274,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'label' => 'LBL_STATUS',
                 'ftype' => 'drop-down',
                 'class' => 'form-control',
+                'rules' => 'required',
                 'dropdownvalues' => array(
                     '' => '',
                     'New' => 'New',
@@ -292,12 +297,14 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'ftype' => 'text',                
                 'class'=> 'form-control',                
                 'js'=>'',
+                'rules' => 'required',
             ),
             'FEEARRANGEMENT' =>
             array(
                 'label' => 'LBL_FEEARRANGEMENT',
                 'ftype' => 'drop-down',
                 'class' => 'form-control',
+                'rules' => 'required',
                 'dropdownvalues' => array(
                     '' => '',
                     'tandm' => 'Time and Materials',
@@ -315,6 +322,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'ftype' => 'text',                
                 'class'=> 'form-control',                
                 'js'=>'',
+                'rules' => 'required',
             ),
             'NOTIFCATIONDATE' =>
             array(
@@ -322,6 +330,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'label' => 'LBL_NOTIFCATIONDATE',
                 'width' => '10%',
                 'default' => false,
+                'rules' => '',
             ),
             'COURT' =>
             array(
@@ -332,6 +341,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'link' => true,
                 'width' => '10%',
                 'default' => false,
+                'rules' => 'required',
             ),
             'SOL' =>
             array(
@@ -340,6 +350,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'label' => 'LBL_SOL',
                 'width' => '10%',
                 'default' => false,
+                'rules' => 'required',
             ),
                 'ID' =>
             array(
@@ -347,6 +358,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'label' => 'LBL_ID',
                 'width' => '10%',
                 'default' => false,
+                'rules' => '',
             ),
 );
 ?>
