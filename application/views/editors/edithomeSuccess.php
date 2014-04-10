@@ -11,6 +11,6 @@ and open the template in the editor.
     <? print_r ($data)?>
 </pre>
 
-<p><?php echo anchor('editors/form', 'Try it again!'); ?></p>
+<p><?php echo anchor('editors/edithome', 'Try it again!'); ?></p>
 
 

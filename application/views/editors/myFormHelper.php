@@ -16,9 +16,9 @@ class MyFormHelper {
     private $frm_labels;
     var $hidden;
 
-    function MyFormHelper() {
-        require_once 'homestrings.php';
-        $this->frm_labels = $mod_strings;
+    function MyFormHelper($formstrings) {
+        //require_once 'homestrings.php';
+        $this->frm_labels = $formstrings;
     }
 
     function addFormHeader($postto = '', $title = 'I Forgot The Title!') {
@@ -40,12 +40,13 @@ class MyFormHelper {
         . '</legend>';
     }
 
-    function addTextField($label, $name, $type, $placeholder, $class, $js, $value) {
+    function addTextField($label, $name, $type, $placeholder, $class, $js,$width='100%', $value) {
         $inputparms = array(
             'name' => $name,
             'value' => set_value($name,$value),
             'placeholder' => $placeholder,
-            'class' => $class
+            'class' => $class,
+            'width' => $width,
         );
         echo '<div class="input-control text" data-role="input-control">'
         . '<label>' . $label . '</label>'
@@ -77,10 +78,10 @@ class MyFormHelper {
         form_hidden($field, '$value');
     }
 
-    function addDropDown($label, $class, $dropdownvalues) {
+    function addDropDown($label, $name, $class, $dropdownvalues) {
         echo '<div class="form-group">'
         . '   <label>' . $label . '</label>'
-        . '  <select class="' . $class . '">';
+        . '  <select class="' . $class . '" name = "'.$name.'">';
         foreach ($dropdownvalues as $key => $option) {
             echo '<option>' . $option . '</option>';
         }
@@ -98,10 +99,10 @@ class MyFormHelper {
 
             switch ($ftype) {
                 case 'text':
-                    $this->addTextField($this->frm_labels[$label], strtolower($field), $ftype, $this->frm_labels[$label], $class, $js, $values[strtolower($field)]);
+                    $this->addTextField($this->frm_labels[$label], strtolower($field), $ftype, $this->frm_labels[$label], $class, $js,$width, $values[strtolower($field)]);
                     break;
                 case 'drop-down':
-                    $this->addDropDown($this->frm_labels[$label], $class, $dropdownvalues);
+                    $this->addDropDown($this->frm_labels[$label],strtolower($field), $class, $dropdownvalues);
                     break;
                 case 'hidden':
                     $this->addHiddon(strtolower($field), 'ABCD');

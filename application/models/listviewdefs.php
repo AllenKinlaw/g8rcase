@@ -230,6 +230,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'ftype' => 'text',                
                 'class'=> 'form-control',                
                 'js'=>'',
+                'rules' => 'required',
             ),
             'DOCKET' =>
             array(
@@ -249,7 +250,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'js'=>'',
                'rules' => 'required',
             ),
-            'CTYPE' =>
+            /*'CTYPE' =>
             array(
                 'type' => 'relate',
                 'studio' => 'visible',
@@ -258,7 +259,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'ftype' => 'popup',
                 'popuptab' => 'g8r_ctype',
                 'rules' => 'required',
-            ),
+            ),*/
             'TAGS' =>
             array(
                 'type' => 'varchar',
@@ -317,10 +318,10 @@ $listViewDefs ['g8r_gcasefile'] = array(
             array(
                 'type' => 'date',
                 'label' => 'LBL_DATEFILED',
-                'width' => '10%',
+                'width' => '90%',
                 'default' => false,
                 'ftype' => 'text',                
-                'class'=> 'form-control',                
+                'class'=> 'form-control date-picker',                
                 'js'=>'',
                 'rules' => 'required',
             ),
@@ -328,8 +329,9 @@ $listViewDefs ['g8r_gcasefile'] = array(
             array(
                 'type' => 'date',
                 'label' => 'LBL_NOTIFCATIONDATE',
-                'width' => '10%',
+                'width' => '90%',
                 'default' => false,
+                'class'=> 'form-control date-picker',
                 'rules' => '',
             ),
             'COURT' =>

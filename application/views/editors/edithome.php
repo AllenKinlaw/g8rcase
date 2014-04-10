@@ -9,7 +9,7 @@ and open the template in the editor.
                  // put your code here
                     require_once 'myFormHelper.php';
                     echo validation_errors();
-                    $editForm = new MyFormHelper();
+                    $editForm = new MyFormHelper($formstrings);
                     $editForm->addFormHeader('editors/edithome',$title);
                     //$editForm->addLegend($title);
                     $editForm->processFieldDefs($formfielddefs,$values);
