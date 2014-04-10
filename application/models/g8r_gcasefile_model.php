@@ -209,4 +209,8 @@ class G8r_gcasefile_model extends CI_Model {
         require_once 'listviewdefs.php';
         return $listViewDefs ['g8r_gcasefile']; 
     }
+    function loadStrings(){
+        require_once 'homestrings.php';
+        return $mod_strings;
+    }
 }
