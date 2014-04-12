@@ -57,5 +57,10 @@ class Editors extends CI_Controller {
             $this->load->view('templates/footer', $data);
         }
     }
+    
+    function testmodel(){
+        $this->load->model('g8r_gcasefile_model');
+        $data = $this->g8r_gcasefile_model->getCases();
+    }
 
 }

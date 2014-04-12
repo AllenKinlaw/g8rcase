@@ -344,6 +344,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'width' => '10%',
                 'default' => false,
                 'rules' => 'required',
+                'class' => 'form-control'
             ),
             'SOL' =>
             array(
@@ -353,6 +354,7 @@ $listViewDefs ['g8r_gcasefile'] = array(
                 'width' => '10%',
                 'default' => false,
                 'rules' => 'required',
+                'class' => 'form-control'
             ),
                 'ID' =>
             array(

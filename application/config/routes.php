@@ -39,6 +39,9 @@
 */
 
 //$route['default_controller'] = "welcome";
+$route['myedits/(:any)'] = "myedits/form/$1";
+$route['update/(:any)'] = "edits/update/$1";
+$route['create/(:any)'] = "edits/form/$1";
 $route['editors/(:any)'] = "editors/form/$1";
 $route['(:any)'] = "pages/view/$1";
 $route['default_controller'] = "pages/view";

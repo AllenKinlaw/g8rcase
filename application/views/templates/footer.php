@@ -2,19 +2,23 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-
+           var currentDate = new Date();  
+           //$("#mydate").datepicker("setDate",currentDate);
         $(".date-picker").datepicker({
             showOn: 'button',
             buttonText: 'Show Date',
             buttonImageOnly: true,
             buttonImage: 'http://jqueryui.com/resources/demos/datepicker/images/calendar.gif',
-            dateFormat: 'dd/mm/yy',
-            constrainInput: true
+            dateFormat: 'mm/dd/yy',
+            constrainInput: true,
+            defaultDate: currentDate
         });
 
         $(".ui-datepicker-trigger").mouseover(function() {
             $(this).css('cursor', 'pointer');
         });
+        $(".ui-datepicker-trigger").css("margin-left","-30px");
+        $(".date-picker").css("width","100%");
 
     });
 </script>

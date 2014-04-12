@@ -9,21 +9,16 @@ and open the template in the editor.
                  // put your code here
                     require_once 'helpers/myFormHelper.php';
                     echo validation_errors();
+                    if(isset($postback)){
+                        echo '<p class="success-msg">'.$postback.'</p>'."\n";
+                    }
                     $editForm = new MyFormHelper($formstrings);
-                    $editForm->addFormHeader('editors/edithome',$title);
+                    $editForm->addFormHeader($postto.'/'.$page,$title);
                     //$editForm->addLegend($title);
                     $editForm->processFieldDefs($formfielddefs,$values);
                     $this->session->set_userdata('hidden', $editForm->hidden);
                     $hidden = $this->session->userdata('hidden');
                     $editForm->addSubmitBtn();
                     $editForm->addFormFooter();
-        /*$editForm = new MyFormHelper();
-        $editForm->addFormHeader($title);
-        //$editForm->addLegend($title);
-        $editForm->addHiddon('id', $id);
-        $editForm->addTextField('Name', 'name', 'text','Enter a Case Name', '', '','');
-        $editForm->addTextField('Docket','docket','text','Enter a Docket Number','','',$case);
-        $editForm->addSubmitBtn();
-        $editForm->addFormFooter();*/
         ?>
 

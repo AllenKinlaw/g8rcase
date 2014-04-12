@@ -12,3 +12,8 @@ and open the template in the editor.
     height: 690px;
     overflow-y: scroll;
 }
+
+.date-picker{
+    width:99%;
+    display: inline-block;
+}
