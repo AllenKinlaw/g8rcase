@@ -360,11 +360,11 @@ $config['proxy_ips'] = '';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
-if(stripos($_SERVER["REQUEST_URI"],'/editors/editHome') === FALSE)
+/*if(stripos($_SERVER["REQUEST_URI"],'/editors/editHome') === FALSE)
 {
     $config['csrf_protection'] = TRUE;
 }
 else
 {
     $config['csrf_protection'] = FALSE;
-}
+}*/

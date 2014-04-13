@@ -9,8 +9,8 @@
 class TheModel extends CI_Model{
     
      
-    function addRecord($theRecord) {
-        
+    function addRecord($module,$theRecord) {
+        require_once 'sugar_rest.php';
         /*
            The Call toset($module, $values) requies 
 	* Parameters: 	$module	= (string) the SugarCRM module name. Usually first
@@ -22,22 +22,22 @@ class TheModel extends CI_Model{
 	*				'field_name' => 'some other value'
 	*			)        
          * The  */
-        return 1; /// just rerurn for now casue still nned to build the $values array
-        $values = array(
-            'id' => $theRecord['id'], //null when inserting a new  record
-            'field_name' => $field_name
-        );
+            $values = $theRecord;
+           // $values['id'] = '';
+            //return $values;  // return what we are posting for debug 
         $sugar = new Sugar_REST();
-        $sugar->Sugar_REST('http://ubuntuawk.cloudapp.net/g8rcase/service/v4_1/rest.php', 'Admin', 'l12007');
-        $sugar->set($module,$values);
+        $sugar->Sugar_REST('http://sugarcrm/service/v4_1/rest.php', 'admin', 'l12007');
+        return $sugar->set($module,$values);
     }
  function deleteRecord($id) {
           $sugar = new Sugar_REST();
         $sugar->Sugar_REST('http://ubuntuawk.cloudapp.net/g8rcase/service/v4_1/rest.php', 'Admin', 'l12007');
  }
  
- function updateRecord($theRecord){
-     addRecord($theRecord);
+ function updateRecord($module,$theRecord,$sessionvars){
+     $id =(string)$sessionvars['id'];
+     $theRecord['id'] = (string)$id;
+     return $this->addRecord($module,$theRecord);
  }
  
  function getRecord($module){

@@ -21,7 +21,7 @@ class MyFormHelper {
         $this->frm_labels = $formstrings;
     }
 
-    function addFormHeader($postto = '', $title = 'I Forgot The Title!') {
+    function addFormHeader($postto = '', $title = '') {
         //echo validation_errors();
         //echo form_open($postto, $attributes); //action="'. base_url(). $postto. '"
         echo '<form method="post" action="' . base_url() . $postto . '" role ="form" /> ' . "\n";
@@ -57,7 +57,7 @@ class MyFormHelper {
     }
 
     function addSubmitBtn() {
-        echo '<input type="submit" value="Submit"> ' . "\n";
+        echo '<input type="submit" value="submit"> ' . "\n";
     }
 
     function addCheckBox($label, $name, $checked, $value) {
