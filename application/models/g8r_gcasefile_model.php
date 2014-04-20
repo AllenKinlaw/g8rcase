@@ -166,7 +166,7 @@ class G8r_gcasefile_model extends CI_Model {
         return $data;
 //echo'inside get accounts...';
         $sugar = new Sugar_REST();
-        $sugar->Sugar_REST('http://ubuntuawk.cloudapp.net/g8rcase/service/v4_1/rest.php', 'Admin', 'l12007');
+        $sugar->Sugar_REST('http://sugarcrm/service/v4_1/rest.php', 'admin', 'l12007');
 
 
 //$results = $sugar->get_with_related("Accounts", array("Accounts" => array('id','name'), "Cases" => array('id','status')));

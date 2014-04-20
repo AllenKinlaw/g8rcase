@@ -1,9 +1,11 @@
 
-
 <script type="text/javascript">
     $(document).ready(function() {
-           var currentDate = new Date();  
-           //$("#mydate").datepicker("setDate",currentDate);
+        
+        $('#myModal').hide();
+        $('#myDetailModal').hide();
+        var currentDate = new Date();
+        //$("#mydate").datepicker("setDate",currentDate);
         $(".date-picker").datepicker({
             showOn: 'button',
             buttonText: 'Show Date',
@@ -17,9 +19,27 @@
         $(".ui-datepicker-trigger").mouseover(function() {
             $(this).css('cursor', 'pointer');
         });
-        $(".ui-datepicker-trigger").css("margin-left","-30px");
-        $(".date-picker").css("width","100%");
+        $(".ui-datepicker-trigger").css("margin-left", "-30px");
+        $(".date-picker").css("width", "100%");
 
+        $(".list-link").click(function() {
+        $("#target-panel").hide();    
+        $("#myDetailModal").show();
+            var targeturl = $(this).attr('target-url');
+            //alert("you chose the target: " + targeturl);
+            $("#target-panel").load(targeturl, function(responseTxt, statusTxt, xhr) {
+                if (statusTxt == "success") {
+                    // alert("External content loaded successfully!");
+                    $('#myDetailModal').hide();
+                    $("#target-panel").show(); 
+                }
+                if (statusTxt == "error") {
+                    $('#myDetailModal').hide();
+                    alert("Error: " + xhr.status + ": " + xhr.statusText);
+                }
+            });
+        });
+        
     });
 </script>
 

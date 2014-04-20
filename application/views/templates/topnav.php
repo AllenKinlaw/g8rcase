@@ -6,12 +6,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">SB Admin v2.0</a>
+        <a class="navbar-brand" href="index.html">Gator Case </a>
     </div>
     <!-- /.navbar-header -->
 
     <ul class="nav navbar-top-links navbar-right">
-        <li class="dropdown">
+<!--        <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
             </a>
@@ -59,10 +59,10 @@
                     </a>
                 </li>
             </ul>
-            <!-- /.dropdown-messages -->
-        </li>
+             /.dropdown-messages 
+        </li>-->
         <!-- /.dropdown -->
-        <li class="dropdown">
+<!--        <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="fa fa-tasks fa-fw"></i>  <i class="fa fa-caret-down"></i>
             </a>
@@ -138,10 +138,10 @@
                     </a>
                 </li>
             </ul>
-            <!-- /.dropdown-tasks -->
-        </li>
+             /.dropdown-tasks 
+        </li>-->
         <!-- /.dropdown -->
-        <li class="dropdown">
+<!--        <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
             </a>
@@ -198,8 +198,8 @@
                     </a>
                 </li>
             </ul>
-            <!-- /.dropdown-alerts -->
-        </li>
+             /.dropdown-alerts 
+        </li>-->
         <!-- /.dropdown -->
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">

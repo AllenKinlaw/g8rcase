@@ -25,7 +25,7 @@ class MyFormHelper {
         //echo validation_errors();
         //echo form_open($postto, $attributes); //action="'. base_url(). $postto. '"
         echo '<form method="post" action="' . base_url() . $postto . '" role ="form" /> ' . "\n";
-        echo form_fieldset($title);
+        echo form_fieldset('');
     }
 
     function addFormFooter() {

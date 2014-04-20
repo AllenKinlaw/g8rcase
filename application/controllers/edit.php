@@ -57,24 +57,34 @@ class edit extends CI_Controller {
         }
     }
 
-    /* Creation is taken care of inthe FORM Procedure
-     * function create($module) {
-      // Check if form is submitted
-      if ($this->input->post('submit')) {
-      $title = $this->input->xss_clean($this->input->post('title'));
-      $content = $this->input->xss_clean($this->input->post('content'));
-
-      // Add the post
-      $this->posts_model->addPost($title, $content);
-      }
-
-      $this->load->view('crud_view');
-      } */
-
-    function update($page) {
+    function display($page, $id = 0) {
         //setup the page Model and defaults
         $this->load->helper(array('form', 'url'));
-        $id = $this->session->userdata('id');
+        //if $id was not passed in it must be set in the Seesion
+        if ($id === 0) {
+            $id = $this->session->userdata('id');
+        }
+        $data['title'] = ucfirst($page);
+        $data['page'] = $page;
+
+        $this->load->model('theModel');
+        $data['formfielddefs'] = $this->theModel->loaddefaultdisplay($page);
+        $data['formstrings'] = $this->theModel->loadStrings($page);
+        //$mod_strings = $data['formstrings'];
+
+        $data['values'] = $this->theModel->getRecord($page, $id, $data['formfielddefs']);
+        // $this->load->view('templates/header', $data);
+        $this->load->view('editors/displayForm', $data);
+        //$this->load->view('templates/footer', $data);
+    }
+
+    function update($page, $id = 0) {
+        //setup the page Model and defaults
+        $this->load->helper(array('form', 'url'));
+        //if $id was not passed in it must be set in the Seesion
+        if ($id === 0) {
+            $id = $this->session->userdata('id');
+        }
         $this->load->library('form_validation');
         $data['title'] = ucfirst($page);
         $data['page'] = $page;
@@ -107,20 +117,24 @@ class edit extends CI_Controller {
                 }
             }
         } else {
+            // check the session
             $sessionmodule = $this->session->userdata(ucfirst($page));
-            $data['values'] = $sessionmodule['values'];
+            if (!isset($sessionmodule)) {
+                $data['values'] = $sessionmodule['values'];
+            } else { // load from the DB
+                $data['values'] = $this->theModel->getRecord($page, $id, $data['formfielddefs']);
+            }
         }
         $data['postto'] = 'update';
-        $this->load->view('templates/header', $data);
+        // $this->load->view('templates/header', $data);
         $this->load->view('editors/defaultForm', $data);
-        $this->load->view('templates/footer', $data);
+        //$this->load->view('templates/footer', $data);
     }
 
     function delete_item() {
-               $id = trim($this->input->post('id'));
+        $id = trim($this->input->post('id'));
         $rtn = array('result' => $id);
         echo json_encode($rtn);
-
     }
 
     function delete($module) {

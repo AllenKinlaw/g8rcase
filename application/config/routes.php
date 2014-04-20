@@ -41,9 +41,11 @@
 //$route['default_controller'] = "welcome";
 $route['deleteitem'] = "edit/delete_item";
 $route['delete/(:any)'] = "edit/delete/$1";
+$route['display/(:any)'] = "edit/display/$1";
 $route['update/(:any)'] = "edit/update/$1";
 $route['create/(:any)'] = "edit/form/$1";
 $route['editors/(:any)'] = "editors/form/$1";
+$route['test/(:any)'] = "pages/test/$1";
 $route['(:any)'] = "pages/view/$1";
 $route['default_controller'] = "pages/view";
 $route['404_override'] = '';

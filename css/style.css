@@ -9,11 +9,58 @@ and open the template in the editor.
 */
 
 .chat-panel-lg .panel-body {
-    height: 690px;
+    height: 705px;
     overflow-y: scroll;
 }
 
 .date-picker{
     width:99%;
     display: inline-block;
+}
+
+.panel-list{
+    margin-left: -25px;
+}
+
+.panel-main{
+    margin-left: -25px;
+    height: 780px;
+}
+.target-panel{
+    height: 740px;
+    overflow-y: scroll;
+ }
+ .name-txt{
+     margin-top: 2px;
+     margin-bottom: 1px;
+ }
+ .emp-title-txt{
+     margin-top: 0px;
+     margin-bottom: 0px;
+  }
+ .display-name{
+     margin-left: 175px;
+ }
+ #page-wrapper {
+    margin: 0 0 0 62px;
+    min-height: 705px;
+
+}
+.navbar-static-side {
+    margin-top: 51px;
+    position: absolute;
+    width: 65px;
+    z-index: 1;
+    height: 780px;
+}
+#myDetailModal{
+    height: 100px;
+    width: 100px;
+    margin-top: 300px;
+}
+#myModal{
+    height: 100px;
+    width: 100px;
+    margin-top: 300px;
+    display:none;
 }

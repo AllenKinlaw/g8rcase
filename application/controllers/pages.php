@@ -11,22 +11,36 @@
  *
  * @author allen
  */
-class Pages extends CI_Controller{
-    //put your code here
-    function view($page ='home'){
-        if( $page=== 'home')
-        {
-          //  echo 'getting accounts... ';
-            $this->load->model('g8r_gcasefile_model');
-            $data= $this->g8r_gcasefile_model->get_cases();
-           // print_r($data);
-        }
-        
-        $this->load->view('templates/header');
-        $this->load->view('templates/topnav');
-        $this->load->view('templates/leftnav');
-        $this->load->view('pages/'.$page,$data);
-        $this->load->view('templates/footer');
+class Pages extends CI_Controller {
 
+    //put your code here
+    function view($module = 'home') {
+        switch ($module) {
+            case 'about':
+
+                $this->load->view('templates/header');
+                $this->load->view('templates/topnav');
+                $this->load->view('templates/leftnav');
+                $this->load->view('pages/about');
+                $this->load->view('templates/footer');
+                break;
+            default:
+                $this->load->model('theModel');
+                $data = $this->theModel->getRecords($module);
+                $data['module'] = ucfirst($module);
+                $this->load->view('templates/header');
+                $this->load->view('templates/topnav');
+                $this->load->view('templates/leftnav');
+                $this->load->view('pages/home', $data);
+                $this->load->view('templates/footer');
+                break;
+        }
     }
+
+    function test() {
+        $this->load->view('templates/header');
+        $this->load->view('pages/test.html');
+        $this->load->view('templates/footer');
+    }
+
 }
