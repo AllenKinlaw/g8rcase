@@ -39,6 +39,7 @@
 */
 
 //$route['default_controller'] = "welcome";
+$route['user/(:any)'] = "user/$1";
 $route['deleteitem'] = "edit/delete_item";
 $route['delete/(:any)'] = "edit/delete/$1";
 $route['display/(:any)'] = "edit/display/$1";

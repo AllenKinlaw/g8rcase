@@ -8,6 +8,14 @@ and open the template in the editor.
     Author     : allen
 */
 
+.fill { 
+    min-height: 100%;
+    height: 100%;
+}
+.panel-registration{
+    height: 450px;
+    padding: 5px;
+}
 .chat-panel-lg .panel-body {
     height: 705px;
     overflow-y: scroll;
@@ -64,3 +72,4 @@ and open the template in the editor.
     margin-top: 300px;
     display:none;
 }
+

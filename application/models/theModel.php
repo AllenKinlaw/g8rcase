@@ -7,33 +7,38 @@
  */
 
 class TheModel extends CI_Model {
-    var $fieldlist =array();
-    function connectSugar($url = 'http://sugarcrm/service/v4_1/rest.php', $user = 'admin', $pass = 'l12007') {
+
+    var $fieldlist = array();
+
+    function connectSugar($user = 'admin', $pass = 'l12007', $save = true) {
         require_once 'sugar_rest.php';
+        $url = 'http://sugarcrm/service/v4_1/rest.php';
         $sugar = new Sugar_REST();
         $sugar->Sugar_REST($url, $user, $pass);
-
         return $sugar;
+    }
+
+    function validateUser($user, $pass) {
+        require_once 'sugar_rest.php';
+        $sugar = new Sugar_REST();
+        $sugar = $this->connectSugar($user, $pass, false);
+        if ($sugar->is_logged_in())
+            return true;
+        return false;
+    }
+
+    function finduser($fields, $options) {
+        require_once 'sugar_rest.php';
+        $sugar = new Sugar_REST();
+        $sugar = $this->connectSugar();
+        $data = $this->getRecordWhere('Users', $fields, $options);
+        return $data;
     }
 
     function addRecord($module, $theRecord) {
         require_once 'sugar_rest.php';
-        /*
-          The Call toset($module, $values) requies
-         * Parameters: 	$module	= (string) the SugarCRM module name. Usually first
-         * 			letter capitalized.
-         * 		$values	= (array) the data of the record to be set in
-         * 		the form:
-         * 			array(
-         * 				'id' => 'some value',
-         * 				'field_name' => 'some other value'
-         * 			)        
-         * The  */
-        $values = $theRecord;
-        // $values['id'] = '';
-        //return $values;  // return what we are posting for debug 
-        $sugar = new Sugar_REST();
-        $sugar->Sugar_REST('http://sugarcrm/service/v4_1/rest.php', 'admin', 'l12007');
+          $values = $theRecord;
+        $sugar = $this->connectSugar();
         return $sugar->set($module, $values);
     }
 
@@ -47,34 +52,40 @@ class TheModel extends CI_Model {
         return $this->addRecord($module, $theRecord);
     }
 
-    function getRecord($module,$id,$fields) {
-          $sugar = $this->connectSugar();
+    function getRecordWhere($module, $fields, $options) {
+        $sugar = $this->connectSugar();
+        $data['_cnt'] = 0;
+        $i = 0;
+        $results = $sugar->get(ucfirst($module), $fields, $options);
+        foreach ($results as $key => $value) {
+            $fieldlst = array_keys($value); // return all of the fields
+            $i++;
+            foreach ($fieldlst as $dfield) {
+                $data[$dfield] = $value[$dfield];
+            }
+        }
+        $data['_cnt'] = $i;
+        return $data;
+    }
 
+    function updateHash($user_hash, $id) {
+        $query = "UPDATE Users SET user_hash='$user_hash', pwd_last_changed='" . now() . "' where id='$id'";
+        $this->db->query($query);
+        return $this->db->affected_rows();
+        ;
+    }
 
-//$results = $sugar->get_with_related("Accounts", array("Accounts" => array('id','name'), "Cases" => array('id','status')));
+    function getRecord($module, $id, $fields) {
+        $sugar = $this->connectSugar();
+
         $this->getfieldlist($fields);
         $fieldlst = $this->fieldlist;
-        $options['where'] = $module.".id = '". $id ."'";
-        $results = $sugar->get(ucfirst($module), $fieldlst,$options
-                //array(
-                //	'id',
-                //	'name',
-                //),
-                //	array(
-                //		'limit' => '10',
-                //'where' => "cases.type = 'Announcement' and (cases.status = 'New' or cases.status = 'Assigned')",
-                //'order_by' => 'cases.date_entered desc',
-                //	)
-        );
-//echo "<pre>";
-//print_r($results);
-//echo "</pre>";
-//$data = explode($results);
+        $options['where'] = $module . ".id = '" . $id . "'";
+        $results = $sugar->get(ucfirst($module), $fieldlst, $options);
         foreach ($results as $key => $value) {
-            foreach ($fieldlst as $dfield) {
-                if(isset($value[$dfield])){
-                $data[$dfield] = $value[$dfield];
-                //$data['fieldvalue'][] = $value[$dfield];
+            foreach ($fieldlst as $dfield) { //looping through and pulling only the requested fields
+                if (isset($value[$dfield])) {
+                    $data[$dfield] = $value[$dfield];
                 }
             }
         }
@@ -83,7 +94,6 @@ class TheModel extends CI_Model {
 
     function getfieldlist($fields) {
         //require_once 'layoutdefs/' . $module . '.php';
-        
         //$fields = $this->loaddisplayfields($module);
         foreach ($fields as $field => $attributes) {
             $fname = strtolower($field);
@@ -92,8 +102,7 @@ class TheModel extends CI_Model {
 
                 $this->fieldlist[] = $fname;
             } else {
-                 $this->getfieldlist($attributes['fields']);
-
+                $this->getfieldlist($attributes['fields']);
             }
         }
     }
@@ -118,27 +127,7 @@ class TheModel extends CI_Model {
         $listModel = $this->getListFields($module);
         $fieldlist = $listModel['fieldlist'];
         $data['listmodel'] = $listModel['displayModel'];
-        $results = $sugar->get(ucfirst($module), $fieldlist
-                //array(
-                //	'id',
-                //	'name',
-                //),
-                //	array(
-                //		'limit' => '10',
-                //'where' => "cases.type = 'Announcement' and (cases.status = 'New' or cases.status = 'Assigned')",
-                //'order_by' => 'cases.date_entered desc',
-                //	)
-        );
-        //echo "<pre>";
-        //print_r($results);
-        //echo "</pre>";
-        //$data = explode($results);
-        /* foreach ($results as $key => $value) {
-          foreach ($fieldlist as $dfield) {
-          $data['fieldkey'][] = $dfield;
-          $data['fieldvalue'][] = $value[$dfield];
-          }
-          } */
+        $results = $sugar->get(ucfirst($module), $fieldlist);
         $data['rows'] = $results;
         return $data;
     }
@@ -153,9 +142,9 @@ class TheModel extends CI_Model {
         return $mod_strings;
     }
 
-      function loaddefaultdisplay($module) {
+    function loaddefaultdisplay($module) {
         require_once "layoutdefs/" . $module . '.php';
-        return $listViewDefs [$module.'display'];
+        return $listViewDefs [$module . 'display'];
     }
 
 }

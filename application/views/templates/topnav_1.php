@@ -211,7 +211,7 @@
                 <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                 </li>
                 <li class="divider"></li>
-                <li><a href="login"><i class="fa fa-sign-out fa-fw login-mnu-item"></i> Login</a>
+                <li><a href="user/logout"><i class="fa fa-sign-out fa-fw login-mnu-item"></i> Logout</a>
                 </li>
             </ul>
             <!-- /.dropdown-user -->

@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/';
+$config['base_url']	= '';
 
 /*
 |--------------------------------------------------------------------------
@@ -368,3 +368,4 @@ else
 {
     $config['csrf_protection'] = FALSE;
 }*/
+$config['csrf_protection'] = FALSE;

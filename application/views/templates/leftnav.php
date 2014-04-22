@@ -1,5 +1,5 @@
 
-<div class="navbar-default navbar-inverse navbar-static-side" role="navigation">
+<div class="navbar-default navbar-inverse navbar-static-side fill" role="navigation">
     <div class="sidebar-collapse">
         <ul class="nav" id="side-menu">
             <li class="active">
