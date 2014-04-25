@@ -18,22 +18,20 @@ class Pages extends CI_Controller {
         switch ($module) {
             case 'about':
 
-                $this->load->view('templates/header');
-                $this->load->view('templates/topnav');
-                $this->load->view('templates/leftnav');
-                $this->load->view('pages/about');
-                $this->load->view('templates/footer');
+                $this->loadsetuppage($module);
                 break;
                 ;
             case 'login':
-                $this->login();
+               $this->loadsetuppage($module);
 
                 break;
-
+            case 'setupprofile':
+                $this->loadsetuppage($module);
+                break;
             case 'welcome_1':
 
                 if ($this->session->userdata('is_logged_in')) {
-                    $this->welcome_1();
+                    $this->loadsetuppage($module);
                 } else {
                     redirect('login');
                 }
@@ -69,11 +67,20 @@ class Pages extends CI_Controller {
         $this->load->view('templates/footer');
     }
 
-function welcome_1() {
+    function welcome_1() {
         $this->load->view('templates/header');
         $this->load->view('templates/topnav');
         $this->load->view('templates/leftnav');
         $this->load->view('pages/welcome_1');
         $this->load->view('templates/footer');
     }
+
+    function loadsetuppage($module) {
+        $this->load->view('templates/header');
+        $this->load->view('templates/topnav');
+        $this->load->view('templates/blankleftnav');
+        $this->load->view('pages/' . $module);
+        $this->load->view('templates/footer');
+    }
+
 }

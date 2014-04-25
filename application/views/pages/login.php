@@ -9,7 +9,7 @@
         <div class="col-lg-8">
             <div class="chat-panel-lg panel panel-default panel-list">
                 <div class="panel-heading">
-                    <i class="fa fa-gears fa-fw"></i> <?php echo 'User Profile' ?>
+                    <i class="fa fa-gears fa-fw"></i> <?php echo 'Login' ?>
 
                 </div>
                 <!-- /.panel-heading -->

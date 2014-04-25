@@ -16,9 +16,20 @@ and open the template in the editor.
     height: 450px;
     padding: 5px;
 }
+.scroll-panel{
+  overflow-y: scroll;
+}
 .chat-panel-lg .panel-body {
     height: 705px;
-    overflow-y: scroll;
+}
+.tall-panel{
+    height: 705px;
+}
+.inside-tall-panel{
+    height: 550px;
+}
+.inside-tall-panel-body{
+    height: 525px;
 }
 
 .date-picker{
@@ -72,4 +83,19 @@ and open the template in the editor.
     margin-top: 300px;
     display:none;
 }
+// stepper Css
+
+#vis-container {
+  margin-top: 10px;
+}
+
+
+
+/* By default, all annotation-steps are hidden. */
+.annotation-step {
+/*  position: absolute;*/
+  display: none;
+}
+
+
 

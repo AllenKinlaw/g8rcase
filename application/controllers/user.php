@@ -194,12 +194,10 @@ class User extends CI_Controller {
                     'temp_hash_c' => '',
                     'title' => 'HMICON');
                 $data = $this->theModel->addRecord('Users', $fields);
-                if($data){
-                return true;
-                }
-                else
-                {
-                 echo 'Error removing temp password';
+                if ($data) {
+                    return true;
+                } else {
+                    echo 'Error removing temp password';
                     return false;
                 }
             }
@@ -239,6 +237,145 @@ class User extends CI_Controller {
             return true;
         }
         return false;
+    }
+
+    function saveprofile() {
+
+        //TEsting load the test user 
+        $sesdata = array(
+            'is_logged_in' => true,
+            'guser' => 'allen.kinlaw@me.com'
+        );
+        $this->session->set_userdata($sesdata);
+        // remove this block above once complete  
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email');
+        $this->form_validation->set_rules('work_phone', 'Work Phone', 'trim|callback_valid_workphone');
+        if ($this->form_validation->run()) {
+
+            if ($this->updateUserProfile()) {
+                redirect('user/savefirm');
+            } else {
+                echo 'database Error saving User Profile!';
+            }
+        } else {
+            $this->load->view('templates/header');
+            $this->load->view('templates/topnav');
+            $this->load->view('templates/blankleftnav');
+            $this->load->view('pages/setupprofile');
+            $this->load->view('templates/footer');
+        }
+    }
+
+    function savefirm($step = 1) {
+
+        //TEsting load the test user 
+        $sesdata = array(
+            'is_logged_in' => true,
+            'guser' => 'allen.kinlaw@me.com'
+        );
+        $this->session->set_userdata($sesdata);
+        // remove this block above once complete  
+        $this->load->library('form_validation');
+            
+        $data['currentstep'] = 'step'.$step;
+        switch ($step) {
+            case(1):
+                $this->setupfirm($data);
+                break;
+            case(2):
+                $this->form_validation->set_rules('firmkey', 'Firm Key', 'trim|callback_validateFirmKey');
+                $this->form_validation->set_rules('newfirm', 'New Firm', 'callback_check_new_or_key');
+                if ($this->form_validation->run()) {
+                $this->setupfirm($data);
+                } else {
+                    $data['currentstep'] = 'step1';
+                    $this->setupfirm($data);
+                }
+                break;
+        }
+    }
+
+    function validateFirmKey()
+    {
+        $this->form_validation->set_message('validateFirmKey', 'This firm key is invalid" ');
+        return true;
+    }
+    function check_new_or_key() {
+        if ($this->input->post('firmkey') || $this->input->post('newfirm')) {
+            return true;
+        }
+        $this->form_validation->set_message('check_new_or_key', 'You must enter a valid firm key or select "Create a New Account" ');
+        return false;
+    }
+
+    private function setupfirm($data) {
+        //$this->form_validation->set_value('firmkey');
+        $this->load->view('templates/header');
+        $this->load->view('templates/topnav');
+        $this->load->view('templates/blankleftnav');
+        $this->load->view('pages/setupfirm',$data);
+        $this->load->view('templates/footer');
+    }
+
+    function updateUserProfile() {
+        $this->load->model('theModel');
+        $fields = array('id',);
+        $options['where'] = "users.user_name = '" . $this->session->userdata('guser') . "'";
+        $data = $this->theModel->finduser($fields, $options);
+        $id = $data['id'];
+
+        if ($data['_cnt'] == 1) {
+
+            // need to add email as a related field...
+            $fields = array('id' => $id,
+                'email1' => $this->input->post('email'),
+                'title' => $this->input->post('title'),
+                'phone_work' => $this->input->post('work_phone'),
+                'phone_home' => $this->input->post('home_phone'),
+                'phone_mobile' => $this->input->post('mobile_phone'),
+                'address_city' => $this->input->post('address_city'),
+                'address_street' => $this->input->post('address_street'),
+                'address_state' => $this->input->post('address_state'),
+                'address_postalcode' => $this->input->post('address_postalcode'),);
+            $data = $this->theModel->addRecord('Users', $fields);
+            if ($data) {
+//                $fields = array(
+//                    'email_address' => $this->input->post('email'));
+//                $data = $this->theModel->addRecord('email_addresses', $fields);
+//                if($data){
+//                    $fields = array(
+//                    'email_address' => $this->input->post('email'));
+//                $data = $this->theModel->addRecord('email_addresses', $fields);
+//                  return true;  
+//                }
+                return true;
+            } else {
+                echo 'Error removing temp password';
+                return false;
+            }
+        }
+        return false;
+    }
+
+    function valid_workphone() {
+        $data = $this->input->post('work_phone');
+        return $this->valid_phone_number_or_empty($data, 'valid_workphone');
+    }
+
+    function valid_phone_number_or_empty($value, $calling) {
+        $value = trim($value);
+        if ($value == '') {
+            return true;
+        } else {
+            if (preg_match('/^\(?[0-9]{3}\)?[-. ]?[0-9]{3}[-. ]?[0-9]{4}$/', $value)) {
+                return true;
+                return preg_replace('/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/', '($1) $2-$3', $value);
+            } else {
+                $this->form_validation->set_message($calling, 'Invalid Phone Number');
+                return false;
+            }
+        }
     }
 
 }
