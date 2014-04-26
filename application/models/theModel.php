@@ -10,40 +10,51 @@ class TheModel extends CI_Model {
 
     var $fieldlist = array();
 
+//    public function __construct() {
+//        parent::__construct();
+//
+//        $this->load->library('sugar_rest');
+//
+//         $url = 'http://sugarcrm/service/v4_1/rest.php';
+//         $user = 'admin';
+//         $pass = 'l12007';
+//        $this->sugar_rest->Sugar_REST($url, $user, $pass);
+//    }
+
     function connectSugar($user = 'admin', $pass = 'l12007', $save = true) {
         require_once 'sugar_rest.php';
         $url = 'http://sugarcrm/service/v4_1/rest.php';
         $sugar = new Sugar_REST();
-        $sugar->Sugar_REST($url, $user, $pass);
+        $this->sugar_rest->Sugar_REST($url, $user, $pass);
         return $sugar;
     }
 
     function validateUser($user, $pass) {
         require_once 'sugar_rest.php';
-        $sugar = new Sugar_REST();
-        $sugar = $this->connectSugar($user, $pass, false);
-        if ($sugar->is_logged_in())
+//        $sugar = new Sugar_REST();
+//        $sugar = $this->connectSugar($user, $pass, false);
+        if ($this->sugar_rest->is_logged_in())
             return true;
         return false;
     }
 
     function finduser($fields, $options) {
-        require_once 'sugar_rest.php';
-        $sugar = new Sugar_REST();
-        $sugar = $this->connectSugar();
+//        require_once 'sugar_rest.php';
+//        $sugar = new Sugar_REST();
+//        $sugar = $this->connectSugar();
         $data = $this->getRecordWhere('Users', $fields, $options);
         return $data;
     }
 
     function addRecord($module, $theRecord) {
-        require_once 'sugar_rest.php';
-          $values = $theRecord;
-        $sugar = $this->connectSugar();
-        return $sugar->set($module, $values);
+//        require_once 'sugar_rest.php';
+        $values = $theRecord;
+//        $sugar = $this->connectSugar();
+        return $this->sugar_rest->set($module, $values);
     }
 
     function deleteRecord($id) {
-        $sugar = $this->connectSugar();
+//        $sugar = $this->connectSugar();
     }
 
     function updateRecord($module, $theRecord, $sessionvars) {
@@ -53,10 +64,10 @@ class TheModel extends CI_Model {
     }
 
     function getRecordWhere($module, $fields, $options) {
-        $sugar = $this->connectSugar();
+//        $sugar = $this->connectSugar();
         $data['_cnt'] = 0;
         $i = 0;
-        $results = $sugar->get(ucfirst($module), $fields, $options);
+        $results = $this->sugar_rest->get(ucfirst($module), $fields, $options);
         foreach ($results as $key => $value) {
             $fieldlst = array_keys($value); // return all of the fields
             $i++;
@@ -76,12 +87,12 @@ class TheModel extends CI_Model {
     }
 
     function getRecord($module, $id, $fields) {
-        $sugar = $this->connectSugar();
+//        $sugar = $this->connectSugar();
 
         $this->getfieldlist($fields);
         $fieldlst = $this->fieldlist;
         $options['where'] = $module . ".id = '" . $id . "'";
-        $results = $sugar->get(ucfirst($module), $fieldlst, $options);
+        $results = $this->sugar_rest->get(ucfirst($module), $fieldlst, $options);
         foreach ($results as $key => $value) {
             foreach ($fieldlst as $dfield) { //looping through and pulling only the requested fields
                 if (isset($value[$dfield])) {
@@ -109,9 +120,11 @@ class TheModel extends CI_Model {
 
     function getListFields($module) {
         //returns only the fields required for displayplying the long list 
-        require_once 'layoutdefs/' . $module . '.php';
-        $data['displayModel'] = $listViewDefs[$module . 'list'];
-        foreach ($listViewDefs[$module . 'list'] as $row => $fields) {
+        //require_once 'layoutdefs/' . $module . '.php';
+        $library = $module.'_layouts';
+        $this->load->library($library);
+        $data['displayModel'] = $this->$library->listViewDefs($module . 'list');
+        foreach ($data['displayModel'] as $row => $fields) {
             // echo 'Adding '. strtolower($key). ' to Field Array <br>';
             foreach ($fields as $field) {
                 $data['fieldlist'][] = strtolower($field);
@@ -122,29 +135,51 @@ class TheModel extends CI_Model {
     }
 
     function getRecords($module) {
-        $sugar = $this->connectSugar();
+//        $sugar = $this->connectSugar();
 
         $listModel = $this->getListFields($module);
         $fieldlist = $listModel['fieldlist'];
         $data['listmodel'] = $listModel['displayModel'];
-        $results = $sugar->get(ucfirst($module), $fieldlist);
+        $results = $this->sugar_rest->get(ucfirst($module), $fieldlist);
         $data['rows'] = $results;
         return $data;
     }
 
     function loaddisplayfields($module) {
-        require_once "layoutdefs/" . $module . '.php';
-        return $listViewDefs [$module];
+       // require_once "layoutdefs/" . $module . '.php';
+                $library = $module.'_layouts';
+        $this->load->library($library);
+        return  $this->$library->listViewDefs($module);
+        //return $listViewDefs [$module];
     }
 
     function loadStrings($module) {
-        require_once "strings/" . $module . '.php';
-        return $mod_strings;
+        //require_once "strings/" . $module . '.php';
+       // return $mod_strings;
+        $library = $module.'_strings';
+        $this->load->library($library);
+        return  $this->$library->mod_strings();
+        
     }
 
     function loaddefaultdisplay($module) {
-        require_once "layoutdefs/" . $module . '.php';
-        return $listViewDefs [$module . 'display'];
+        //require_once "layoutdefs/" . $module . '.php';
+        //return $listViewDefs [$module . 'display'];
+                        $library = $module.'_layouts';
+        $this->load->library($library);
+        return  $this->$library->listViewDefs($module . 'display');
+    }
+
+    function getFirmByKey($key) {
+
+
+        $fields = array('id', 'name', 'account_type', 'phone_office', 'ticker_symbol', 'billing_address_street', 'billing_address_city', 'billing_address_state', 'billing_address_postalcode');
+        $options['where'] = "accounts.ticker_symbol = '" . $key . "'";
+        $data = $this->getRecordWhere('Accounts', $fields, $options);
+        if ($data['_cnt'] == 1) {
+            return $data;
+        }
+        return false;
     }
 
 }
