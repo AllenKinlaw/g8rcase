@@ -22,18 +22,18 @@ class TheModel extends CI_Model {
 //    }
 
     function connectSugar($user = 'admin', $pass = 'l12007', $save = true) {
-        require_once 'sugar_rest.php';
+//        require_once 'sugar_rest.php';
         $url = 'http://sugarcrm/service/v4_1/rest.php';
-        $sugar = new Sugar_REST();
+        //$sugar = new Sugar_REST();
         $this->sugar_rest->Sugar_REST($url, $user, $pass);
         return $sugar;
     }
 
     function validateUser($user, $pass) {
-        require_once 'sugar_rest.php';
+ //       require_once 'sugar_rest.php';
 //        $sugar = new Sugar_REST();
-//        $sugar = $this->connectSugar($user, $pass, false);
-        if ($this->sugar_rest->is_logged_in())
+       $sugar = $this->connectSugar($user, $pass, false);
+       if ($this->sugar_rest->is_logged_in())
             return true;
         return false;
     }
