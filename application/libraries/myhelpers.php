@@ -45,5 +45,10 @@ class Myhelpers {
         $CI->session->set_userdata('is_logged_in', true);
         $CI->session->set_userdata($data);
     }
+    function setFirmData($data = array('firmKey' => '')) {
 
+        $CI = & get_instance();
+        $CI->load->library('session');
+        $CI->session->set_userdata($data);
+    }
 }

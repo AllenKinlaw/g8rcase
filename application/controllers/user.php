@@ -207,8 +207,8 @@ class User extends CI_Controller {
 
             if ($this->updateUserProfile($step)) {
                 if ($fdefaults['steps'] != $step) {
-                    $js = "<script> alert('Step " . $step . " complete')  </script>";
-                    echo $js;
+                    // $js = "<script> alert('Step " . $step . " complete')  </script>";
+                    //echo $js;
                     $fname = 'users/forms/userProfile_' . ($step + 1);
 
                     $fdata = array('steps' => $fdefaults['steps'],
@@ -239,6 +239,7 @@ class User extends CI_Controller {
                 }
 
                 //$form .= $this->load->view($fname, $data, true);
+
                 echo $form;
             } else {
                 echo 'database Error saving User Profile!';
@@ -256,6 +257,147 @@ class User extends CI_Controller {
             $form .= $this->load->view('widgets/simpleStepperSteps', $fdata, true);
             echo $form;
         }
+    }
+
+    function savePayment($step,$firm) {
+        echo 'Step ' . $step . ' Complete!';
+        $data = array();
+        $data = array_merge($data, $this->myhelpers->getUserData());
+        $this->load->model('setupprofile_defaultData');
+        // remove this block above once complete  
+        $fdefaults = $this->setupprofile_defaultData->getPaymentData();
+        $firmData = $this->getFirmByKey($firm);
+        $this->load->library('form_validation');
+        switch ($step) {
+            case 1:
+                // we are saving prefered email and Title
+                $this->form_validation->set_rules('frequency', 'Payment Plan', 'required');
+                break;
+
+            default:
+                break;
+        }
+
+
+        if ($this->form_validation->run()) {
+
+            if ($this->updatePaymentProfile($step,$firmData)) {
+                if ($fdefaults['steps'] != $step) {
+//                    $js = "<script> alert('Step " . $step . " complete')  </script>";
+//                    echo $js;
+//                    $fname = 'users/forms/setupPayment_' . ($step + 1);
+                    $fdata = array('steps' => $fdefaults['steps'],
+                        'step' => $step + 1);
+                    $form = $this->load->view('widgets/simpleStepper', $fdata, true);
+
+                    $fdata = array('form' => 'users/forms/setupPayment_' . ($step + 1),
+                        'step' => $step + 1,
+                        'heading' => $data['username'],
+                        'data' => $data,
+                        'firmkey' => $this->session->userdata('firmKey'));
+                    $form .= $this->load->view('widgets/simpleStepperSteps', $fdata, true);
+                } else {
+                    $fdefaults = $this->setupprofile_defaultData->getFirmData();
+                    echo 'Payment Profile Complete. You are now a Gator';
+                }
+                echo $form;
+            } else {
+                echo 'database Error saving User Profile!';
+            }
+        } else {
+
+            $fdata = array('steps' => $fdefaults['steps'],
+                'step' => $step);
+
+            $fname = 'users/forms/userProfile_' . ($step + 1);
+
+            $form = $this->load->view('widgets/simpleStepper', $fdata, true);
+            $postvar = $this->input->post();
+            $fdata = array('form' => 'users/forms/setupPayment_' . ($step),
+                'step' => $step,
+                'heading' => $data['username'],
+                'data' => $data,
+                'firmkey' => $this->session->userdata('firmKey'),
+                'numUsers' => $this->input->post('numusers'));
+            $form .= $this->load->view('widgets/simpleStepperSteps', $fdata, true);
+            echo $form;
+        }
+    }
+
+    private function updatePaymentProfile($step, $firmdata) {
+
+        //   $this->theModel->connectSugar();
+
+        switch ($step) {
+            case 1:
+                $fields = array('id' => $firmdata['id'],
+                    'account_type' => $this->input->post('accountype'),
+                    'name' => $this->input->post('firm_name'),
+                    'employees' => $this->input->post('num_users'),
+                    'industry' => $this->session->userdata('firmKey'));
+                break;
+            default:
+                break;
+        }
+        // need to add email as a related field...
+        //$data = $this->theModel->addRecord('Accounts', $fields);
+        // if ($data) {
+        return true;
+        // } else {
+        //     echo 'Error updating Firm Record';
+        //     return false;
+        // }
+        //}
+        return false;
+    }
+
+    private function updateFirmProfile($step, $firmdata) {
+        //$this->load->model('theModel');
+        //$fields = array('id',);
+        // $options['where'] = "users.user_name = '" . $this->session->userdata('guser') . "'";
+        $this->theModel->connectSugar();
+        //$data = $this->theModel->finduser($fields, $options);
+        //$id = $data['id'];
+        //if ($data['_cnt'] == 1) {
+        switch ($step) {
+            case 1:
+                // we are establishing a new firm
+                $firmKey = uniqid();
+                if ($this->input->post('newfirm')) {
+                    $fields = array('id' => '', 'industry' => $firmKey);
+                }
+                break;
+            case 2:
+                $fields = array('id' => $firmdata['id'],
+                    'account_type' => $this->input->post('accountype'),
+                    'name' => $this->input->post('firm_name'),
+                    'employees' => $this->input->post('num_users'),
+                    'industry' => $this->session->userdata('firmKey'));
+                break;
+            case 3:
+                $fields = array('id' => $firmdata['id'],
+                    'phone_office' => $this->input->post('acct_phone'),
+                    'billing_address_city' => $this->input->post('city'),
+                    'billing_address_street' => $this->input->post('street'),
+                    'billing_address_state' => $this->input->post('state'),
+                    'billing_address_postalcode' => $this->input->post('postalcode'),
+                    'industry' => $this->session->userdata('firmKey'));
+            default:
+                break;
+        }
+        // need to add email as a related field...
+
+        $data = $this->theModel->addRecord('Accounts', $fields);
+        if ($data) {
+            $firmKey = $data['entry_list']['industry']['value'];
+            $this->myhelpers->setFirmData(array('firmKey' => $firmKey));
+            return true;
+        } else {
+            echo 'Error updating Firm Record';
+            return false;
+        }
+        //}
+        return false;
     }
 
     private function updateUserProfile($step) {
@@ -369,20 +511,39 @@ class User extends CI_Controller {
                 break;
         }
         if ($this->form_validation->run()) {
-            if ($fdefaults['steps'] != $step) {
-                $fdata = array('steps' => $fdefaults['steps'],
-                    'step' => $step + 1);
-                $form = $this->load->view('widgets/simpleStepper', $fdata, true);
-                $fdata = array('form' => 'users/forms/setupFirm_' . ($step + 1),
-                    'step' => $step + 1,
-                    'heading' => $data['username'],
-                    'data' => $data);
-                $form .= $this->load->view('widgets/simpleStepperSteps', $fdata, true);
+
+            if ($this->updateFirmProfile($step, $firmData)) {
+                if ($fdefaults['steps'] != $step) {
+                    $fdata = array('steps' => $fdefaults['steps'],
+                        'step' => $step + 1);
+                    $form = $this->load->view('widgets/simpleStepper', $fdata, true);
+                    $fdata = array('form' => 'users/forms/setupFirm_' . ($step + 1),
+                        'step' => $step + 1,
+                        'heading' => $data['username'],
+                        'data' => $data,
+                        'firmkey' => $this->session->userdata('firmKey'));
+                    $form .= $this->load->view('widgets/simpleStepperSteps', $fdata, true);
+                } else {
+                    $step = 1;
+                    $fdefaults = $this->setupprofile_defaultData->getPaymentData();
+                    echo 'Firm Profile Complete. Set up Payments.';
+
+                    $fdata = array('steps' => $fdefaults['steps'],
+                        'step' => $step);
+                    $form = $this->load->view('widgets/simpleStepper', $fdata, true);
+
+                    $fdata = array('form' => 'users/forms/setupPayment_' . ($step),
+                        'step' => $step,
+                        'heading' => $data['username'],
+                        'data' => $data,
+                        'firmkey' => $this->session->userdata('firmKey'),
+                        'numUsers' => $firmData['employees']);
+                    $form .= $this->load->view('widgets/simpleStepperSteps', $fdata, true);
+                }
+                echo $form;
+            } Else {
+                echo 'Error Updating DB - Firm Profile. Please try again later.';
             }
-            else{
-                $form = 'Now Process Pament';
-            }
-            echo $form;
         } else {
             $fdata = array('steps' => $fdefaults['steps'],
                 'step' => $step);
@@ -391,7 +552,8 @@ class User extends CI_Controller {
             $fdata = array('form' => 'users/forms/setupFirm_' . ($step),
                 'step' => $step,
                 'heading' => $data['username'],
-                'data' => $data);
+                'data' => $data,
+                'firmkey' => $this->session->userdata('firmKey'));
             $form .= $this->load->view('widgets/simpleStepperSteps', $fdata, true);
             echo $form;
         }
@@ -413,8 +575,9 @@ class User extends CI_Controller {
     private function getFirmByKey($key) {
 
         $this->load->model('theModel');
-        $fields = array('id', 'name', 'account_type', 'office_phone', 'ticker_symbol', 'billing_address_street', 'billing_address_city', 'billing_address_state', 'billing_address_postalcode');
-        $options['where'] = "account.ticker_symbol = '" . $key . "'";
+        $this->theModel->connectSugar();
+        $fields = array('id', 'name', 'account_type', 'office_phone', 'employees', 'industry', 'billing_address_street', 'billing_address_city', 'billing_address_state', 'billing_address_postalcode');
+        $options['where'] = "accounts.industry = '" . $key . "'";
         $data = $this->theModel->getRecordWhere('Accounts', $fields, $options);
         if ($data['_cnt'] == 1) {
             return $data;

@@ -3,7 +3,7 @@
 $formvars = array('class' => 'ajax-form',
     'target-div' => 'step-form-div',
     'id' => 'step-form');
-echo form_open('user/savefirm/2', $formvars);
+echo form_open('user/savefirm/2/'.$firmkey, $formvars);
 ?>
 <div class="well well-default">;
 
@@ -32,16 +32,16 @@ echo form_open('user/savefirm/2', $formvars);
             'value' => $this->input->post('firm_name')
         ));
         ?>
-    </p>'
-<!--    <p> <label class="firm-field">Number of users you will set up under this account: </label>
+    </p>
+    <p> <label class="firm-field hidden">Number of users you will set up under this account: </label>
         <?php
         echo form_input(array(
             'name' => 'num_users',
             'id' => 'num_users',
-            'class' => 'form-control firm-field',
-            'value' => $this->input->post('num_users')
+            'class' => 'form-control firm-field hidden',
+            'value' => set_value($this->input->post('num_users'),1)
         ));
         ?>
-    </p>-->
+    </p>
 </div>
 

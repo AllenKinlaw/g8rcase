@@ -10,19 +10,49 @@ function switchAnnotation(newStep)
     $(".annotation-step").hide();
     $("#" + newStep + "-annotation").delay(300).fadeIn(500);
 }
-
+function spinnermodal()
+{
+    return '<div class="modal-dialog hidden" id="myDetailModal" > <div class="modal-content"><div class="modal-body"><i class="fa fa-spinner fa-spin fa-5x text-primary"></i></div></div></div>';
+}
 
 $(document).ready(function() {
-    $("[name='accounttype']").on("change", function() {
+    $(document).on("change", "[name='frequency']", function() {
+
+        var plantype = $(this).val();
+        var numusers = $("#num-users").val();
+        var payment = 0;
+        //alert(plantype);
+        if (plantype == 'F') {
+            $("#pay-total-div").removeClass('hidden');
+            $("#pay-total").html('$0.00');
+            return;
+        }
+        if (plantype == 'M') {
+            $("#pay-total-div").removeClass('hidden');
+            payment = numusers * 35;
+            $("#pay-total").html('$' + payment);
+            return;
+        }
+        if (plantype == 'A') {
+            $("#pay-total-div").removeClass('hidden');
+            payment = numusers * 360;
+            $("#pay-total").html('$' + payment);
+            return;
+        }
+;
+    });
+
+    $(document).on("change", "[name='accounttype']", function() {
 
         var acttype = $(this).val();
         //alert(acttype);
         if (acttype == 'S') {
-            $(".firm-field").hide();
+            $(".firm-field").addClass('hidden');
+            $("#num_users").val(1);
             return;
         }
-        $(".firm-field").show();
-    })
+        $(".firm-field").removeClass('hidden');
+    });
 
 //        $("a.step-link").click(function(e) {
 //            var clickedStep = $(this).attr('id');
@@ -32,16 +62,16 @@ $(document).ready(function() {
 //        });
 
 //    $("#save-step").click(function(e) {
-       $(document).on("click","#save-step",function() {
+    $(document).on("click", "#save-step", function() {
         var url = $("#step-form").attr("action"),
-        targetdiv = "#" + $("#step-form").attr("target-div");
-        $(targetdiv).hide();
-        $("#myModal").show();
+                targetdiv = "#" + $("#step-form").attr("target-div");
+       $(targetdiv).hide();
+            //$("#myDetailModal").removeClass('hidden');
         //var targeturl = $(this).attr('target-url');
         //alert("you chose the target: " + targeturl);
         var posting = $.post(url, $("#step-form").serialize(), function(data) {
             $(targetdiv).empty().append(data);
-            $("#myModal").hide();
+            //$("#myDetailModal").addClass('hidden');
             $(targetdiv).show();
         });
         // Put the results in a div
@@ -49,7 +79,7 @@ $(document).ready(function() {
         posting.error(function(data) {
 
             alert('error' + data)
-            $("#myModal").hide();
+           // $("#myDetailModal").addClass('hidden');
             $(targetdiv).show();
         });
     });

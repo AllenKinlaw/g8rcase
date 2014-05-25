@@ -36,7 +36,7 @@ and open the template in the editor.
 	</script>
     </head>
     <body>
-            <div class="row">
+<!--            <div class="row">
         <div class="col-lg-12" id="myModal">
             <div class="modal-dialog" >
                 <div class="modal-content">
@@ -46,5 +46,5 @@ and open the template in the editor.
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
         <div id="wrapper">

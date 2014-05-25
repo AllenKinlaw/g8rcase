@@ -6,6 +6,7 @@
                     <?php echo $heading ?></div>
                 <div class="panel-body inside-tall-panel-body" >
                     <?php
+                    //$this->load->view('widgets/spinnerModal');
                     $this->load->view($form, $data);
                     ?>
                 </div>

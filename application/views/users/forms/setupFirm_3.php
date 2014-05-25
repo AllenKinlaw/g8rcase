@@ -3,7 +3,7 @@
 $formvars = array('class' => 'ajax-form',
     'target-div' => 'step-form-div',
     'id' => 'step-form');
-echo form_open('user/savefirm/3', $formvars);
+echo form_open('user/savefirm/3/'.$firmkey, $formvars);
 ?>
 
 <div class="well well-default">

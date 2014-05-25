@@ -27,13 +27,13 @@
                 </div>
 
             </div>
-            <div class="modal-dialog" id="myDetailModal" >
+<!--            <div class="modal-dialog" id="myDetailModal" >
                 <div class="modal-content">
                     <div class="modal-body">
                         <i class="fa fa-spinner fa-spin fa-5x text-primary"></i>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <!-- /.col-lg-4 -->
         </div>
         <div class="col-lg-4 pull-right">

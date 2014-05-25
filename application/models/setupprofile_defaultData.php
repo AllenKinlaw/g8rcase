@@ -16,6 +16,10 @@ class Setupprofile_defaultData extends CI_Model {
         return array('TaskHeader' => 'Complete Firm Profile...',
                      'steps'=> 3);
     }
+        function getPaymentData() {
+        return array('TaskHeader' => 'Complete Payment Profile...',
+                     'steps'=> 2);
+    }
 }
 
 ?>
