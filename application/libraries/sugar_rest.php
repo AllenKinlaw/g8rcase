@@ -517,7 +517,7 @@ class Sugar_REST {
             'search_string' => $search_string,
             'modules' => $modules,
             'offset' => $offset,
-            'max_results' => $max_results,
+            'max_results' => $max_results
         );
 
         $result = $this->rest_request(

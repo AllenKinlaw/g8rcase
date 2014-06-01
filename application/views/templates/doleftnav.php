@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-if($this->session->userdata('logged_in')){
+if($this->session->userdata('is_logged_in')){
     $this->load->view('templates/leftnav');
     }
     else {

@@ -297,8 +297,14 @@ class User extends CI_Controller {
                         'firmkey' => $this->session->userdata('firmKey'));
                     $form .= $this->load->view('widgets/simpleStepperSteps', $fdata, true);
                 } else {
-                    $fdefaults = $this->setupprofile_defaultData->getFirmData();
-                    echo 'Payment Profile Complete. You are now a Gator';
+                    //$fdefaults = $this->setupprofile_defaultData->getFirmData();
+                        $fdata = array('form' => 'users/forms/profileComplete',
+                        'step' => $step,
+                        'heading' => $data['username'],
+                        'data' => $data,
+                        'firmkey' => $this->session->userdata('firmKey'));
+                    $form = $this->load->view('widgets/simpleStepperSteps', $fdata, true);
+                    //echo 'Payment Profile Complete. You are now a Gator';
                 }
                 echo $form;
             } else {

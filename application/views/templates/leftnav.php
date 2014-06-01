@@ -4,7 +4,7 @@
         <ul class="nav" id="side-menu">
             <li class="active">
 <!--                <span class="input-group-btn">-->
-                <a href="<?php echo base_url() ?>contacts" class="left-menu-item">
+                <a href="<?php echo base_url() ?>contacts/view/main" class="left-menu-item">
 <!--                        <button class="btn btn-default" type="button">-->
                             <i class="fa fa-users fa-fw fa-2x text-primary"></i>
                         <!--</button>-->

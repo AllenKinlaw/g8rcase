@@ -33,7 +33,7 @@
                         </div>
 
                     </div>
-                     <?php $this->myhelpers->displaySpinner();?>
+                     <?php //$this->myhelpers->displaySpinner();?>
                 </div>
                 <!--             div inner row   -->
             </div>

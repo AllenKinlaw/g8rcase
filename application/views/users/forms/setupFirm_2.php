@@ -5,7 +5,7 @@ $formvars = array('class' => 'ajax-form',
     'id' => 'step-form');
 echo form_open('user/savefirm/2/'.$firmkey, $formvars);
 ?>
-<div class="well well-default">;
+<div class="well well-default">
 
     <legend> Firm Account Details </legend>
     <p> 

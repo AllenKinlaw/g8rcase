@@ -17,7 +17,7 @@ and open the template in the editor.
     padding: 5px;
 }
 .scroll-panel{
-  overflow-y: scroll;
+    overflow-y: scroll;
 }
 .chat-panel-lg .panel-body {
     height: 705px;
@@ -26,12 +26,11 @@ and open the template in the editor.
     height: 705px;
 }
 .inside-tall-panel{
-    height: 550px;
+    height: 725px;
 }
 .inside-tall-panel-body{
     height: 525px;
 }
-
 .date-picker{
     width:99%;
     display: inline-block;
@@ -48,19 +47,19 @@ and open the template in the editor.
 .target-panel{
     height: 740px;
     overflow-y: scroll;
- }
- .name-txt{
-     margin-top: 2px;
-     margin-bottom: 1px;
- }
- .emp-title-txt{
-     margin-top: 0px;
-     margin-bottom: 0px;
-  }
- .display-name{
-     margin-left: 175px;
- }
- #page-wrapper {
+}
+.name-txt{
+    margin-top: 2px;
+    margin-bottom: 1px;
+}
+.emp-title-txt{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.display-name{
+    margin-left: 175px;
+}
+#page-wrapper {
     margin: 0 0 0 62px;
     min-height: 705px;
 
@@ -76,6 +75,7 @@ and open the template in the editor.
     height: 100px;
     width: 100px;
     margin-top: 30px;
+    display:none;
 }
 #myModal{
     height: 100px;
@@ -86,16 +86,18 @@ and open the template in the editor.
 // stepper Css
 
 #vis-container {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 
 
 /* By default, all annotation-steps are hidden. */
 .annotation-step {
-/*  position: absolute;*/
-  display: none;
+    /*  position: absolute;*/
+    display: none;
 }
 
-
+#main-list-div, #main-form-div{
+    overflow-y: scroll;
+}
 

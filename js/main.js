@@ -15,6 +15,49 @@ function spinnermodal()
     return '<div class="modal-dialog hidden" id="myDetailModal" > <div class="modal-content"><div class="modal-body"><i class="fa fa-spinner fa-spin fa-5x text-primary"></i></div></div></div>';
 }
 
+function postajaxcall(url, targetdiv, form)
+{
+
+    $(targetdiv).hide();
+    //$("#myDetailModal").show();
+    //var targeturl = $(this).attr('target-url');
+    //alert("you chose the target: " + targeturl);
+    if (form) {
+        if (form == 'this') {
+            var posting = $.post(url, $(this).serialize(), function(rtndata) {
+                $(targetdiv).empty().append(rtndata);
+                //$("#myDetailModal").hide();
+                ;
+                $(targetdiv).show();
+            });
+        }
+        else {
+            var posting = $.post(url, form, function(rtndata) {
+                $(targetdiv).empty().append(rtndata);
+                //$("#myDetailModal").hide();
+                ;
+                $(targetdiv).show();
+            });
+        }
+    }
+    else {
+        var posting = $.post(url, '', function(rtndata) {
+            $(targetdiv).empty().append(rtndata);
+            //$("#myDetailModal").hide();
+            ;
+            $(targetdiv).show();
+        });
+    }
+    // Put the results in a div
+
+    posting.error(function(rtndata) {
+
+        alert('error' + rtndata)
+                //$("#myDetailModal").hide();
+                ;
+        $(targetdiv).show();
+    });
+}
 $(document).ready(function() {
     $(document).on("change", "[name='frequency']", function() {
 
@@ -39,9 +82,8 @@ $(document).ready(function() {
             $("#pay-total").html('$' + payment);
             return;
         }
-;
+        ;
     });
-
     $(document).on("change", "[name='accounttype']", function() {
 
         var acttype = $(this).val();
@@ -53,25 +95,30 @@ $(document).ready(function() {
         }
         $(".firm-field").removeClass('hidden');
     });
-
 //        $("a.step-link").click(function(e) {
 //            var clickedStep = $(this).attr('id');
 //            switchStep(clickedStep);
 //            switchAnnotation(clickedStep);
 //            return false;
 //        });
+    $(document).on("click", "#btn-search", function() {
+//alert('searching...');
+        var url = $("#btn-search").attr("href");
+        var targetdiv = "#main-list-div";
 
-//    $("#save-step").click(function(e) {
-    $(document).on("click", "#save-step", function() {
-        var url = $("#step-form").attr("action"),
-                targetdiv = "#" + $("#step-form").attr("target-div");
-       $(targetdiv).hide();
-            //$("#myDetailModal").removeClass('hidden');
+        //$("#myDetailModal").show();
         //var targeturl = $(this).attr('target-url');
         //alert("you chose the target: " + targeturl);
-        var posting = $.post(url, $("#step-form").serialize(), function(data) {
+        //var posting = $.post(url, {search_str: $("#search-btn-input").val()}, function(data) {
+        var searchstr = $("#search-btn-input").val();
+        if (!searchstr) {
+            alert('Enter a value to search.')
+            return;
+        }
+        $(targetdiv).hide();
+        var posting = $.post(url, {search_str: searchstr}, function(data) {
             $(targetdiv).empty().append(data);
-            //$("#myDetailModal").addClass('hidden');
+            //$("#myDetailModal").hide();;
             $(targetdiv).show();
         });
         // Put the results in a div
@@ -79,12 +126,95 @@ $(document).ready(function() {
         posting.error(function(data) {
 
             alert('error' + data)
-           // $("#myDetailModal").addClass('hidden');
+            //$("#myDetailModal").hide();;
+            $(targetdiv).show();
+        });
+    });
+    //Select a list item to detail
+    $(document).on("click", "#display-list-item", function(event) {
+        event.preventDefault();
+        var url = $(this).attr("target-url");
+//         alert('clicked '+ url);
+//          return;
+        var targetdiv = "#main-form-div";
+
+        //$("#myDetailModal").show();
+        //var targeturl = $(this).attr('target-url');
+        //alert("you chose the target: " + targeturl);
+        //var posting = $.post(url, {search_str: $("#search-btn-input").val()}, function(data) {
+        $(targetdiv).hide();
+        var posting = $.post(url, '', function(data) {
+            $(targetdiv).empty().append(data);
+            //$("#myDetailModal").hide();;
+            $(targetdiv).show();
+        });
+        // Put the results in a div
+
+        posting.error(function(data) {
+
+            alert('error' + data)
+            //$("#myDetailModal").hide();;
+            $(targetdiv).show();
+        });
+    });
+//    $("#save-step").click(function(e) {
+    $(document).on("click", "#edit-btn", function(event) {
+        event.preventDefault();
+        var url = $("#step-form").attr("action");
+        var targetdiv = "#" + $("#step-form").attr("target-div");
+        //var form = "#step-form";
+        var form = $("#step-form").serialize();
+        //alert ('url: '+ url +'\n' + 'targetdiv: '+ targetdiv +'\n' + 'form:' + form);
+        postajaxcall(url, targetdiv, form)
+    });
+    $(document).on("click", "#cancel-btn", function(event) {
+        event.preventDefault();
+        var url = $("#cancel-btn").attr("href");
+        var targetdiv = "#" + $("#step-form").attr("target-div");
+        var form = "";
+        //alert ('url: '+ url +'\n' + 'targetdiv: '+ targetdiv +'\n' + 'form:' + form);
+        postajaxcall(url, targetdiv, form)
+    });
+    $(document).on("click", "#delete-btn", function(event) {
+        event.preventDefault();
+        var url = $("#delete-btn").attr("href");
+//        var targetdiv = "#" + $("#step-form").attr("target-div");
+//        var form = "";
+        //alert ('url: '+ url +'\n' + 'targetdiv: '+ targetdiv +'\n' + 'form:' + form);
+        $.post(url, '', function(data) {
+            if(data){
+                document.location.href = data;
+                return;
+            }
+            alert('Database Error. Please check your network connection and try again.');
+        });
+
+    });
+    $(document).on("click", "#save-step", function() {
+        var url = $("#step-form").attr("action"),
+                targetdiv = "#" + $("#step-form").attr("target-div");
+        $(targetdiv).hide();
+        $("#myDetailModal").show();
+        //var targeturl = $(this).attr('target-url');
+        //alert("you chose the target: " + targeturl);
+        var posting = $.post(url, $("#step-form").serialize(), function(data) {
+            $(targetdiv).empty().append(data);
+            $("#myDetailModal").hide();
+            ;
+            $(targetdiv).show();
+        });
+        // Put the results in a div
+
+        posting.error(function(data) {
+
+            alert('error' + data)
+            $("#myDetailModal").hide();
+            ;
             $(targetdiv).show();
         });
     });
     $('#myModal').hide();
-    $('#myDetailModal').hide();
+    //$('#myDetailModal').hide();
     var currentDate = new Date();
     //$("#mydate").datepicker("setDate",currentDate);
     $(".date-picker").datepicker({
@@ -108,7 +238,7 @@ $(document).ready(function() {
         //alert("you chose the target: " + targeturl);
         $("#target-panel").load(targeturl, function(responseTxt, statusTxt, xhr) {
             if (statusTxt == "success") {
-                // alert("External content loaded successfully!");
+// alert("External content loaded successfully!");
                 $('#myDetailModal').hide();
                 $("#target-panel").show();
             }
@@ -118,12 +248,10 @@ $(document).ready(function() {
             }
         });
     });
-
     $(".ajax-form").submit(function(event) {
         event.preventDefault();
         var url = $(this).attr("action"),
                 targetdiv = "#" + $(this).attr("target-div");
-
         $(targetdiv).hide();
         $("#myModal").show();
         //var targeturl = $(this).attr('target-url');
@@ -141,6 +269,13 @@ $(document).ready(function() {
             $("#myModal").hide();
             $(targetdiv).show();
         });
-
+    });
+    $(document).on("submit", ".main-form", function(event) {
+        event.preventDefault();
+        var url = $(this).attr("action")
+        var targetdiv = "#" + $(this).attr("target-div");
+        var form = $(this).serialize();
+        //alert ('url: '+ url +'\n' + 'targetdiv: '+ targetdiv +'\n' + 'form:' + form);
+        postajaxcall(url, targetdiv, form)
     });
 });
