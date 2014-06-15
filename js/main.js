@@ -1,4 +1,16 @@
 
+function set_create(url)
+{
+    $("#create-button").attr("href", url);
+}
+function hide_create()
+{
+    $("#create-button").toggle("display");
+}
+function show_create()
+{
+    $("#create-button").show();
+}
 function switchStep(newStep)
 {
     $(".step-link").toggleClass("active", false);
@@ -158,13 +170,49 @@ $(document).ready(function() {
         });
     });
 //    $("#save-step").click(function(e) {
-    $(document).on("click", "#edit-btn", function(event) {
+    $(document).on("click", "#create-button", function(event) {
         event.preventDefault();
-        var url = $("#step-form").attr("action");
+        var url = $(this).attr("href");
         var targetdiv = "#" + $("#step-form").attr("target-div");
         //var form = "#step-form";
-        var form = $("#step-form").serialize();
+        var form = '';
         //alert ('url: '+ url +'\n' + 'targetdiv: '+ targetdiv +'\n' + 'form:' + form);
+        postajaxcall(url, targetdiv, form)
+    });
+       $(document).on("click", "#module-pills li a", function(event) {
+        event.preventDefault();
+        var url = $(this).attr("href");
+        var targetdiv = "#" + $("#step-form").attr("target-div");
+
+        //var form = $("#current-control-form").serialize();
+        var form ='';
+        //alert ('url: '+ url +'\n' + 'targetdiv: '+ targetdiv +'\n' + 'form:' + form);
+        postajaxcall(url, targetdiv, form)
+        // $('#cases-table').dataTable();
+
+    });
+           $(document).on("click", "#module-pills li a", function(event) {
+        event.preventDefault();
+        var url = $(this).attr("href");
+        var targetdiv = "#" + $("#step-form").attr("target-div");
+
+        //var form = $("#current-control-form").serialize();
+        var form ='';
+        //alert ('url: '+ url +'\n' + 'targetdiv: '+ targetdiv +'\n' + 'form:' + form);
+        postajaxcall(url, targetdiv, form)
+         $('#cases-table').dataTable();
+
+    });
+    $(document).on("click", "#case-row", function(event) {
+        event.preventDefault();
+        $("#cases-table tr").toggleClass('success',false);
+        $(this).toggleClass('success');
+        var idform = $(this).find('form');
+        var url = idform.attr("action");
+        var targetdiv = "#" + idform.attr("target-div");
+        //var form = "#step-form";
+        var form = idform.serialize();
+        //alert ('Id:'+form +'url: '+ url +'\n' + 'targetdiv: '+ targetdiv +'\n' + 'form:' + form);
         postajaxcall(url, targetdiv, form)
     });
     $(document).on("click", "#cancel-btn", function(event) {
@@ -182,7 +230,7 @@ $(document).ready(function() {
 //        var form = "";
         //alert ('url: '+ url +'\n' + 'targetdiv: '+ targetdiv +'\n' + 'form:' + form);
         $.post(url, '', function(data) {
-            if(data){
+            if (data) {
                 document.location.href = data;
                 return;
             }

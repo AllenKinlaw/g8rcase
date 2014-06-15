@@ -42,6 +42,7 @@
 //$route['private_user/(:any)'] = "private_user/$1";
 $route['user/(:any)'] = "user/$1";
 $route['contacts/(:any)'] = "contacts/$1";
+$route['cases/(:any)'] = "cases/$1";
 //$route['deleteitem'] = "edit/delete_item";
 //$route['delete/(:any)'] = "edit/delete/$1";
 //$route['display/(:any)'] = "edit/display/$1";

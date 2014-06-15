@@ -16,35 +16,36 @@ and open the template in the editor.
         <!-- SB Admin CSS - Include with every page -->
         <link href="<?php echo base_url(); ?>css/sb-admin.css" rel="stylesheet">
 
-<!--        Have to load jquery  and jquery ui in the header for widgets to load-->
+        <!--        Have to load jquery  and jquery ui in the header for widgets to load-->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="<?php echo base_url(); ?>js/jquery-ui-1.10.4.custom.js"></script>
+
         <link href="<?php echo base_url(); ?>css/style.css" rel="stylesheet">
         <title>Home</title>
-                <script>
-	$(function() {
-		
-		
-		
-		$( "#datepicker" ).datepicker({
-			inline: true
-		});
-		
+        <script>
+            $(function() {
 
-		
-	});
-	</script>
+
+
+                $("#datepicker").datepicker({
+                    inline: true
+                });
+
+
+
+            });
+        </script>
     </head>
     <body>
-<!--            <div class="row">
-        <div class="col-lg-12" id="myModal">
-            <div class="modal-dialog" >
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <i class="fa fa-spinner fa-spin fa-5x text-primary"></i>
+        <!--            <div class="row">
+                <div class="col-lg-12" id="myModal">
+                    <div class="modal-dialog" >
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <i class="fa fa-spinner fa-spin fa-5x text-primary"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>-->
+            </div>-->
         <div id="wrapper">

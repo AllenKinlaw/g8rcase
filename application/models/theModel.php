@@ -1,4 +1,7 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,6 +21,43 @@ class TheModel extends CI_Model {
 //        $sugar = new $this->Sugar_rest->Sugar_REST($url, $user, $pass);
 //        return $sugar;
         $this->sugar_rest->Sugar_REST($url, $user, $pass);
+    }
+
+    function connectMongo() {
+        $m = new MongoClient();
+
+
+// select a database
+        $mongodb = $m->g8rcase;
+        return $mongodb;
+    }
+
+    function getMongoData($doccol, $filter) {
+
+// select a collection (analogous to a relational database's table)
+        $mongodb = $this->connectMongo();
+        $collection = $mongodb->$doccol;
+        $cursor = $collection->find($filter);
+        return $cursor;
+    }
+
+    function getMongoDatabyId($doccol, $filter) {
+
+// select a collection (analogous to a relational database's table)
+        $mongodb = $this->connectMongo();
+        $collection = $mongodb->$doccol;
+        $cursor = $collection->findOne($filter);
+        return $cursor;
+    }
+
+    function setMongoData($doccol, $filter, $values) {
+
+// select a collection (analogous to a relational database's table)
+        $mongodb = $this->connectMongo();
+        $collection = $mongodb->$doccol;
+        $collection->update($filter, array('$set' => $values));
+        //$cursor = $collection->find($filter);
+        return;
     }
 
     function validateUser($user, $pass) {
@@ -43,7 +83,7 @@ class TheModel extends CI_Model {
         return $this->sugar_rest->set($module, $values);
     }
 
-    function deleteRecord($module,$id) {
+    function deleteRecord($module, $id) {
         $fields['deleted'] = 1;
         $fields['id'] = $id;
         return $this->addRecord($module, $fields);
@@ -80,7 +120,6 @@ class TheModel extends CI_Model {
 
     function getRecord($module, $id, $fields) {
 //        $sugar = $this->connectSugar();
-
 //        $this->getfieldlist($fields);
 //        $fieldlst = $this->fieldlist;
         $options['where'] = $module . ".id = '" . $id . "'";
@@ -94,9 +133,15 @@ class TheModel extends CI_Model {
         }
         return $data;
     }
-    function getaRecord($module, $id, $fields) {
+
+    function getaRecord($module, $id, $fields, $options = '') {
         $fieldlst = $fields;
-        $options['where'] = $module . ".id = '" . $id . "'";
+        if (!$options) {
+            $options['where'] = $module . ".id = '" . $id . "'";
+        }
+        foreach ($fields as $key) {
+            $data[$key] = '';
+        }
         $results = $this->sugar_rest->get(ucfirst($module), $fieldlst, $options);
         foreach ($results as $key => $value) {
             foreach ($fieldlst as $dfield) { //looping through and pulling only the requested fields
@@ -107,6 +152,28 @@ class TheModel extends CI_Model {
         }
         return $data;
     }
+
+    function getRelatedRecords($module, $id, $fields, $options = '') {
+        $fieldlst = $fields;
+        if (!$options) {
+            $options['where'] = $module . ".id = '" . $id . "'";
+        }
+//        foreach ($fields as $key) {
+//            $data[$key] = '';
+//        }
+        $results = $this->sugar_rest->get_with_related(ucfirst($module), $fieldlst, $options);
+        return $results;
+        foreach ($results as $key => $value) {
+            foreach ($fieldlst as $dfield) { //looping through and pulling only the requested fields
+                if (isset($value[$dfield])) {
+                    $data[$dfield] = $value[$dfield];
+                }
+            }
+        }
+
+        return $data;
+    }
+
     function getfieldlist($fields) {
         //require_once 'layoutdefs/' . $module . '.php';
         //$fields = $this->loaddisplayfields($module);
@@ -136,16 +203,21 @@ class TheModel extends CI_Model {
         return $data;
     }
 
-    function getRecords($module,$fields) {
+    function getRecords($module, $fields) {
         //$sugar = $this->connectSugar();
-        $results = $this->sugar_rest->get(ucfirst($module), $fields);
+        $options['limit'] = 500;
+        $options['order_by'] = 'last_name ASC';
+
+        $results = $this->sugar_rest->get(ucfirst($module), $fields, $options);
         $data = $results;
         return $data;
     }
-function searchRecords ($search_string,$modules,$offset,$max_results,$assigned_user_id='',$select_fields='') {
-    $rtn = $this->sugar_rest->search_by_module($search_string, $modules, $offset, $max_results);
-    return $rtn;
-}
+
+    function searchRecords($search_string, $modules, $offset, $max_results, $assigned_user_id = '', $select_fields = '') {
+        $rtn = $this->sugar_rest->search_by_module($search_string, $modules, $offset, $max_results);
+        return $rtn;
+    }
+
     function loaddisplayfields($module) {
         require_once "layoutdefs/" . $module . '.php';
         return $listViewDefs [$module];

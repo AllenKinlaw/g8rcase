@@ -1,7 +1,7 @@
 <span class='text-danger'> <?php $this->myhelpers->displayErrorAlert(validation_errors()); ?></span>
 <?php
 echo '<script>';
-echo '   set_create("'.base_url().'contacts/create/'.$fields['id'].'")';
+echo '   set_create("'.base_url().'cases/create/'.$fields['id'].'")';
 echo '</script>'
 ?>
 <?php
@@ -13,8 +13,7 @@ echo '</script>'
 $formvars = array('class' => 'main-form',
     'target-div' => 'main-form-div',
     'id' => 'step-form');
-echo form_open('contacts/update/View/'.$fields['id'], $formvars);
-$pills = array('first' => 'contacts', 'second' => 'cases', 'third' => 'crganizations', 'fourth' => 'documents','id'=>$fields['id']);
+echo form_open('cases/update/View/'.$fields['id'], $formvars);
 ?>
 <div class="pull-right">
 <!--    <button class="btn btn-circle btn-success" id="create-btn">
@@ -24,16 +23,14 @@ $pills = array('first' => 'contacts', 'second' => 'cases', 'third' => 'crganizat
         <i class="fa fa-edit fa-fw"> </i>
     </button>
 </div>
-<?php $this->load->view('widgets/modulePills', $pills) ?>
-<div class="tab-pane active" id="first">
+
+<div class="tab-pane active" id="second">
 <?php 
 $fields['disabled'] = 'disabled=""';
-//$fields['disabled'] = '';
-$this->load->view('contacts/forms/contactsHidden', $fields);
-$this->load->view('contacts/forms/contactsLegend', $fields);
-$this->load->view('contacts/forms/contactFields', $fields);
+$this->load->view('cases/forms/caseHidden', $fields);
+$this->load->view('cases/forms/caseFields', $fields);
 ?>
 </div>
 
-<?php echo form_close(); 
+<?php echo form_close();
 ?>

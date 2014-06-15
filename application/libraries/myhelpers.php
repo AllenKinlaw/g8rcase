@@ -55,6 +55,18 @@ class Myhelpers {
         $CI->load->library('session');
         $CI->session->set_userdata($data);
     }
+        function setModuleData($data = array('currentModule' => '')) {
+
+        $CI = & get_instance();
+        $CI->load->library('session');
+        $CI->session->set_userdata($data);
+    }
+            function getModuleData() {
+
+        $CI = & get_instance();
+        $CI->load->library('session');
+       return $CI->session->userdata('currentModule');
+    }
 
     function getLetterBackground($letter) {
         switch ($letter) {

@@ -88,7 +88,7 @@ class Sugar_REST {
 //            return;
 //        }
 
-        if ( !is_null($username) && !is_null($password)) {
+        if (!is_null($username) && !is_null($password)) {
             //this->rest_url = $rest_url;
             $this->username = $username;
             $this->password = $password;
@@ -387,30 +387,34 @@ class Sugar_REST {
     }
 
     public function print_results($results) {
+        $str = '';
         if (isset($results['entry_list'][0]['module_name'])) {
             $module_name = $results['entry_list'][0]['module_name'];
-            echo "<h1>" . $module_name . "</h1>";
+            $str.= "<h1>" . $module_name . "</h1>";
             foreach ($results['entry_list'] as $i => $entry) {
-                echo "<div class='first'>";
+                $str.= "<div class='first'>";
                 foreach ($entry['name_value_list'] as $field) {
-                    echo "<div class='second'>" . $field['name'] . " = " . $field['value'] . "</div>";
+                    $str.= "<div class='second'>" . $field['name'] . " = " . $field['value'] . "</div>";
                 }
                 if (isset($results['relationship_list'][$i])) {
-                    foreach ($results['relationship_list'][$i] as $module) {
-                        echo "<div class='second'><b>related " . $module['name'] . "</b><br/>";
-                        foreach ($module['records'] as $x => $record) {
-                            echo "<div class='third'>";
-                            foreach ($record as $field) {
-                                echo "<div class='fourth'>" . $field['name'] . " = " . $field['value'] . "</div>";
+                    foreach ($results['relationship_list'][$i] as $modulelist) {
+                        foreach ($modulelist as $z => $module) {
+                            $str.= "<div class='second'><b>related " . $module['name'] . "</b><br/>";
+                            foreach ($module['records'] as $x => $record) {
+                                $str.= "<div class='third'>";
+                                foreach ($record['link_value'] as $field) {
+                                    $str.= "<div class='fourth'>" . $field['name'] . " = " . $field['value'] . "</div>";
+                                }
+                                $str.= "</div>";
                             }
-                            echo "</div>";
                         }
-                        echo "</div>";
+                        $str.= "</div>";
                     }
                 }
-                echo "</div>";
+                $str.= "</div>";
             }
         }
+        return $str;
     }
 
     public function set_relationship($module_name, $module_id, $link_field_name, $related_ids) {
