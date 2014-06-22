@@ -187,15 +187,15 @@ class Cases extends CI_Controller {
     }
 
     public function delete($id) {
+
         $this->load->model('theModel');
-        $this->theModel->connectSugar();
-        $data = $this->theModel->deleteRecord('Cases', $id);
-        if ($data) {
-            echo base_url() . 'cases/view/main';
-        } else {
-            $js = '';
-            echo $js;
-        }
+        $filter = array(
+            '_id' => new MongoId($id)
+        );
+        $fields['deleted'] = 1;
+        $this->theModel->setMongoData('cases', $filter, $fields);
+
+        echo base_url() . 'cases/view/main';
     }
 
     public function create($callingid) {

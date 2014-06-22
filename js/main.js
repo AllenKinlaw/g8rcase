@@ -203,6 +203,7 @@ $(document).ready(function() {
          $('#cases-table').dataTable();
 
     });
+
     $(document).on("click", "#case-row", function(event) {
         event.preventDefault();
         $("#cases-table tr").toggleClass('success',false);
