@@ -1,4 +1,4 @@
-<ul id="main-list" class=" chat">
+<ul id="main-list" class="chat" data-role="listview" >
     <?php
     foreach ($listitems as $row => $cols) {
 

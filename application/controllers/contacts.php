@@ -11,51 +11,104 @@ if (!defined('BASEPATH'))
 
 class Contacts extends CI_Controller {
 
-    public function view($module = 'main') {
+    function __construct() {
+        parent::__construct();
+        $this->load->model('contactsModel');
+    }
+
+    //retrieve the inital list of Contacts
+    public function Index($module = 'main') {
 
         $this->myhelpers->setUserData();
         $this->myhelpers->setModuleData(array('currentModule' => 'contacts'));
-        $displaymodel = 'contacts_defaultData';
-        $this->load->model($displaymodel);
-        $data = array();
-        $data = array_merge($data, $this->$displaymodel->getData());
+        $data = array(
+            'listname' => 'widgets\list',
+            'listitems' => $this->contactsModel->getContacts(),
+            'module' => 'contacts',
+            'TaskHeader' => 'Contacts');
+        $data = array_merge($data, $this->myhelpers->getUserData());
         $this->load->view('templates/header');
         $this->load->view('templates/topnav');
         $this->load->view('templates/doleftnav');
-
-        $data = array_merge($data, $this->myhelpers->getUserData());
-        $data['listname'] = 'widgets\list';
-        $data['listitems'] = $this->getContacts($this->$displaymodel->getFields());
-        $data['module'] = 'contacts';
-        $this->load->view($module, $data);
+        $this->load->view('main', $data);
         $this->load->view('templates/footer');
     }
 
-    private function getContacts($fields) {
-        $this->load->model('theModel');
-        $this->theModel->connectSugar();
-        $data = $this->theModel->getRecords('contacts', $fields);
-        foreach ($data as $row => $col) {
-            $firstletter = $col['last_name'][0];
-            $background = $this->myhelpers->getLetterBackground($firstletter);
-            $rowtext1 = $col['salutation'] . ' ' . $col['first_name'] . ' ' . $col['last_name'];
-            $rowtext2 = 'M. ' . $col['phone_mobile'];
-            $rowtext3 = $col['email1'];
-            $smlabel = '';
-            $smtext = $col['department'];
-            $rtn[] = array('id' => $col['id'],
-                'targeturl' => base_url() . 'contacts/details/View/' . $col['id'],
-                'background' => $background,
-                'letter' => $firstletter,
-                'rowtext1' => $rowtext1,
-                'rowtext2' => $rowtext2,
-                'rowtext3' => $rowtext3,
-                'smlabel' => $smlabel,
-                'smtext' => $smtext);
-        }
+    public function details($id) {
 
-        return $rtn;
+        $data = array();
+        $this->load->view('templates/header');
+        $this->load->view('templates/topnav');
+        $this->load->view('templates/doleftnav');
+        $data = array_merge($data, $this->myhelpers->getUserData());
+        $filter = array(
+            '_id' => new MongoId($id)
+        );
+        $dfields = $this->mongoModel->getMongoDatabyId('contacts', $filter);
+        $data['fields'] = $dfields;
+        $data['fields']['id'] = $id;
+        $data['TaskHeader'] = 'Contacts';
+        $rtn = $this->load->view('contacts/forms/detailView', $data, true);
+        echo $rtn;
     }
+
+    public function delete($id) {
+        $this->load->model('mongoModel');
+        $filter = array(
+            '_id' => new MongoId($fields['id'])
+        );
+        $fields['deleted'] = 1;
+        //$fields['datefiled'] = new MongoDate(strtotime($fields['datefiled']));
+        $this->mongoModel->setMongoData('contacts', $filter, $fields);
+        echo base_url() . 'contacts/view/main';
+    }
+
+    public function create() {
+        $form = $this->load->view('contacts/forms/createView', '', true);
+        echo $form;
+        return;
+    }
+
+    public function update($id = '') {
+        $this->load->library('form_validation');
+        if ($id) {
+            $filter = array(
+                '_id' => new MongoId($id)
+            );
+            $dfields = $this->mongoModel->getMongoDatabyId('contacts', $filter);
+            $fdata['fields'] = $dfields;
+            $fdata['fields']['id'] = $id;
+            $fdata['TaskHeader'] = 'Contacts';
+        } else {
+            $fdata = array('fields' => $this->input->post());
+            $testd = $this->input->post('email');
+            $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email');
+            $this->form_validation->set_rules('phone', 'Phone', 'trim|callback_valid_workphone');
+            $this->form_validation->set_rules('street', 'Street Address', 'trim');
+            $this->form_validation->set_rules('city', 'City', 'trim');
+            $this->form_validation->set_rules('state', 'State', 'trim');
+            $this->form_validation->set_rules('postalcode', 'Zip Code', 'trim');
+        }
+        if ($this->form_validation->run() and $id == '') {
+
+            $rtnid = $this->contactsModel->updateContact($this->input->post());
+            if ($rtnid) {
+
+                $js = "<script> alert('Contact Updated!')  </script>";
+                echo $js;
+                $this->details($rtnid);
+                return;
+            } else {
+                $js = "<script> alert('Database Error. Please check your network connection and try again.')  </script>";
+                echo $js;
+            }
+        } else {
+            $form = $this->load->view('contacts/forms/updateView', $fdata, true);
+            echo $form;
+        }
+    }
+
+
 
     public function search() {
         if ($this->input->post('search_str')) {
@@ -105,118 +158,6 @@ class Contacts extends CI_Controller {
             $listitems = $this->myhelpers->displayErrorAlert('No Match found');
         }
         echo $listitems;
-    }
-
-    public function details($action = 'View', $id) {
-
-        $currentModule = $this->myhelpers->getModuleData();
-        $displaymodel = 'contacts_defaultData';
-        $this->load->model($displaymodel);
-        $data = array();
-        $data = array_merge($data, $this->$displaymodel->getData());
-        $this->load->view('templates/header');
-        $this->load->view('templates/topnav');
-        $this->load->view('templates/doleftnav');
-        $data = array_merge($data, $this->myhelpers->getUserData());
-//        $data['listname'] = 'widgets\list';
-//        $data['listitems'] = $this->getContacts($this->$displaymodel->getFields());
-        $module = 'contacts/forms/detail' . $action;
-        $this->load->model('theModel');
-        $this->theModel->connectSugar();
-        $data['fields'] = $this->theModel->getaRecord('contacts', $id, $this->$displaymodel->getFields());
-        $rtn = $this->load->view($module, $data, true);
-        echo $rtn;
-    }
-
-    public function delete($id) {
-        $this->load->model('theModel');
-        $this->theModel->connectSugar();
-        $data = $this->theModel->deleteRecord('Contacts', $id);
-        if ($data) {
-            echo base_url() . 'contacts/view/main';
-        } else {
-            $js = '';
-            echo $js;
-        }
-    }
-
-    public function create($callingid) {
-        $displaymodel = 'contacts_defaultData';
-        $this->load->model($displaymodel);
-        $data = array();
-        $data = array_merge($data, $this->$displaymodel->getData());
-        $fields = array();
-        foreach ($this->$displaymodel->getFields() as $value) {
-            $fields[$value] = '';
-        }
-        $fdata = array('fields' => $fields);
-        $fdata['callingid'] = $callingid;
-
-        $form = $this->load->view('contacts/forms/updateView', $fdata, true);
-        echo $form;
-        return;
-    }
-
-    public function update($action = 'View', $id = '') {
-
-
-        $displaymodel = 'contacts_defaultData';
-        $this->load->model($displaymodel);
-        $data = array();
-        $data = array_merge($data, $this->$displaymodel->getData());
-//        $this->load->view('templates/header');
-//        $this->load->view('templates/topnav');
-//        $this->load->view('templates/doleftnav');
-//        $data = array_merge($data, $this->myhelpers->getUserData());
-//        $module = 'contacts/forms/update' . $action;
-        $this->load->model('theModel');
-//        $this->theModel->connectSugar();
-//        $data['fields'] = $this->theModel->getaRecord('contacts', $id, $this->$displaymodel->getFields());
-//        $rtn = $this->load->view($module, $data, true);
-//        echo $rtn;
-        ///////////////////////////////////////////////////////////////////////
-        if ($action == 'Update') {
-            $this->load->library('form_validation');
-            // we are saving prefered email and Title
-            $this->form_validation->set_rules('email1', 'Email', 'required|trim|valid_email');
-            $this->form_validation->set_rules('phone_work', 'Work Phone', 'trim|callback_valid_workphone');
-            $this->form_validation->set_rules('phone_home', 'Home Phone', 'trim|callback_valid_homephone');
-            $this->form_validation->set_rules('phone_mobile', 'Mobile Phone', 'trim|callback_valid_mobilephone');
-            $this->form_validation->set_rules('phone_other', 'Mobile Phone', 'trim|callback_valid_otherphone');
-            $this->form_validation->set_rules('phone_fax', 'Mobile Phone', 'trim|callback_valid_faxphone');
-            $this->form_validation->set_rules('primary_address_street', 'Street Address', 'trim');
-            $this->form_validation->set_rules('primary_address_city', 'City', 'trim');
-            $this->form_validation->set_rules('primary_address_state', 'State', 'trim');
-            $this->form_validation->set_rules('primary_address_postalcode', 'Zip Code', 'trim');
-        }
-        if ($this->form_validation->run()and $action == 'Update') {
-
-            $rtnid = $this->updateContact($this->input->post());
-            if ($rtnid) {
-
-                $js = "<script> alert('Contact Updated!')  </script>";
-                echo $js;
-                $this->details('View', $rtnid);
-                return;
-            } else {
-                $js = "<script> alert('Database Error. Please check your network connection and try again.')  </script>";
-                echo $js;
-            }
-        } else {
-            $fdata = array('fields' => $this->input->post());
-            $form = $this->load->view('contacts/forms/updateView', $fdata, true);
-            echo $form;
-        }
-    }
-
-    private function updateContact($fields) {
-        $this->load->model('theModel');
-        $this->theModel->connectSugar();
-        $data = $this->theModel->addRecord('Contacts', $fields);
-        if ($data) {
-            return $data['id'];
-        }
-        return false;
     }
 
     function valid_workphone() {

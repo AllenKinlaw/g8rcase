@@ -222,7 +222,7 @@ $(document).ready(function() {
         var targetdiv = "#" + $("#step-form").attr("target-div");
         var form = "";
         //alert ('url: '+ url +'\n' + 'targetdiv: '+ targetdiv +'\n' + 'form:' + form);
-        postajaxcall(url, targetdiv, form)
+        postajaxcall(url, targetdiv, form);
     });
     $(document).on("click", "#delete-btn", function(event) {
         event.preventDefault();

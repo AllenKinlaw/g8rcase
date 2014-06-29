@@ -7,27 +7,55 @@ $m = new MongoClient();
 // select a database
 $db = $m->g8rcase;
 
-// select a collection (analogous to a relational database's table)
-$collection = $db->cases;
+$collection = $db->contacts_ABC_sdf_XYZ;
 $collection->remove();
 // add a record
-$document = array( "docket" => "abc-123-sc-2014",
-"title" => "Spuds v Alex",
- "Client" => "a7a2aadc-7622-8db4-d81e-53950f1b6a48",
- "type" => "Civil",
- "claims" => "defamation",
- "status" => "Filed",
- // "Notes" => "",
-//"Resolution"=>"",
-"partytype" => "plaintiff",
- //"coparty"=>""
-"datefiled" => new MongoDate()
+$document = array("type" => "client",
+    "salutation" => "Mr.",
+    "firstName" => "Spud",
+    "lastName" => "Mckensie",
+    "middleName" => "S.",
+    "phone" => array('primary' => '555-555-1212'),
+    "email" => array('primary' => 'spuds@coors,com'),
+    "address" => array('primary' => array('street' => '123',
+            'city' => 'golden',
+            'state' => 'CO',
+            'postalcode' => '23456',
+            'country' => 'USA')),
+    "datefiled" => new MongoDate()
 );
 $collection->insert($document);
+// select a collection (analogous to a relational database's table)
+$filter = array(
+    'lastName' => "Mckensie"
+);
+
+$cursor = $collection->find($filter);
+
+// iterate through the results
+foreach ($cursor as $client) {
+    echo '' . $client["firstName"] .' '. $client["lastName"] .'"/n"';
+    //echo $document["author"] . '\n'";
+    $collection2 = $db->cases_ABC_sdf_XYZ;
+$collection2->remove();
+// add a record
+$document = array("docket" => "abc-123-sc-2014",
+    "title" => "Spuds v Alex",
+    "Client" => $client["_id"]  ,
+    "type" => "Civil",
+    "claims" => "defamation",
+    "status" => "Filed",
+    // "Notes" => "",
+//"Resolution"=>"",
+    "partytype" => "plaintiff",
+    //"coparty"=>""
+    "datefiled" => new MongoDate()
+);
+$collection2->insert($document);
 
 $document = array("docket" => "abc-123-sc-2014",
     "title" => "Spuds v State",
-    "Client" => "a7a2aadc-7622-8db4-d81e-53950f1b6a48",
+    "Client" => $client["_id"] ,
     "type" => "Criminal",
     "claims" => "dui",
     "status" => "Verdict",
@@ -37,7 +65,7 @@ $document = array("docket" => "abc-123-sc-2014",
     //"coparty"=>""
     "datefiled" => new MongoDate(strtotime("2010-01-30 00:00:00"))
 );
-$collection->insert($document);
+$collection2->insert($document);
 //
 //// add another record, with a different "shape"
 //$document = array( "title" => "XKCD", "online" => true );
@@ -48,14 +76,16 @@ $collection->insert($document);
 //$collection->insert($document);
 //// find everything in the collection
 $filter = array(
-    'client' => "a7a2aadc-7622-8db4-d81e-53950f1b6a48"
+    'client' => $client["_id"] 
 );
 
-$cursor = $collection->find($filter);
+$cursor = $collection2->find($filter);
 
 // iterate through the results
 foreach ($cursor as $document) {
     echo '' . $document["title"] . '"/n"';
     //echo $document["author"] . '\n'";
 }
+}
+
 ?> 

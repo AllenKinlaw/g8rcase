@@ -6,13 +6,7 @@ $formvars = array('class' => 'main-form',
 echo form_open('contacts/update/', $formvars);
 //$pills = array('first' => 'Contacts', 'second' => 'Cases', 'third' => 'Organizations', 'fourth' => 'Documents',);
 ?>
-<div class="pull-right">
 
-    <button class="btn btn-circle btn-danger" id="delete-btn" href="<?php echo base_url().'contacts/delete/'.$fields['_id'] ?>" >
-        <i class="fa fa-minus fa-fw"> </i>
-    </button>
-</div>
-<?php //$this->load->view('widgets/modulePills', $pills) ?>
 <div class="tab-pane active" id="first">
 <?php 
 $fields['disabled'] = '';
@@ -24,7 +18,7 @@ $this->load->view('contacts/forms/contactFields', $fields);
     <button class="btn btn-success" id="save-btn" type="submit" >
         <i class="fa fa-save fa-fw"> </i> Save
     </button>
-    <button class="btn btn-danger" id="cancel-btn" href=" <?php echo base_url().'contacts/details/'.$fields['_id'] ?>" >
+    <button class="btn btn-danger" id="cancel-btn" href=" <?php echo base_url().'contacts/' ?>" >
         <i class="fa fa-undo fa-fw"> </i> Cancel
     </button>
 </div>

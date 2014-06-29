@@ -1,5 +1,5 @@
 <!--    <div class="well well-default">-->
-<input name="id" value="<?php echo $id ?>" type="hidden" class="form-control">
+<input name="_id" value="<?php echo set_value('_id', ((isset($fields['_id'])) ? $fields['_id'] : '')); ?>" type="hidden" class="form-control">
 <div class="row">
     <div class="col-lg-6">
         <div class="panel panel-info">
@@ -8,62 +8,102 @@
             </div>
             <div class="panel-body">
                 <fieldset <?php echo $disabled; ?> >
-                    <label>Preferred Email Address: </label>
-                    <input name="email1" value="<?php echo $email1 ?>" type="text" class="form-control">
+                    <?php
+                    if (isset($fields['_id'])) {
+                        $cntr = 0;
+                        foreach ($fields as $field => $value) {
+                            if (strpos($field, 'email') !== false) {
+                                $cntr +=1;
+                                echo '<label>' . ucfirst($field) . ' </label>';
+                                echo '<input id= "' . $field . '" name="email" class="form-control" type="text" value="' . $value . '">';
+                            }
+                        }
+                    } else {
+                        echo '<label> Primary Email </label>';
+                        echo '<input id="email" name="email" class="form-control" type="text" value="" placeholder="Email">';
+                    }
+                    ?>
                 </fieldset>
 
             </div>
         </div>
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <label><i class="fa fa-flag fa-fw"> </i>Primary Address </label>
-            </div>
-            <div class="panel-body">
-                <fieldset <?php echo $disabled; ?> >
-                    <label>Street Address: </label>
-                    <input name="primary_address_street" value="<?php echo $primary_address_street ?>" type="text" class="form-control">
-                    <label>City: </label> 
-                    <input name="primary_address_city" value="<?php echo $primary_address_city ?>" type="text" class="form-control">
-                    <label>State: </label> 
-                    <input name="primary_address_state" value="<?php echo $primary_address_state ?>" type="text" class="form-control">
-                    <label>Zip: </label> 
-                    <input name="primary_address_postalcode" value="<?php echo $primary_address_postalcode ?>" type="text" class="form-control">
-                    <label>Country: </label> 
-                    <input name="primary_address_country" value="<?php echo $primary_address_country ?>" type="text" class="form-control">
-                    <!--        '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            'alt_address_street',
-                            'alt_address_city',
-                            'alt_address_state',
-                            'alt_address_postalcode',
-                            'alt_address_country',-->
-                </fieldset>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-6">
         <div class="panel panel-info">
             <div class="panel-heading">
                 <label><i class="fa fa-phone-square fa-fw"> </i>Phone </label>
             </div>
             <div class="panel-body">
                 <fieldset <?php echo $disabled; ?> >
-                    <label>Work Phone: </label> 
-                    <input name="phone_work" value="<?php echo $phone_work ?>" type="text" class="form-control">
-                    <label>Home Phone: </label> 
-                    <input name="phone_home" value="<?php echo $phone_home ?>" type="text" class="form-control">
-                    <label>Mobile Phone: </label> 
-                    <input name="phone_mobile" value="<?php echo $phone_mobile ?>" type="text" class="form-control">
-                    <label>Other Phone: </label> 
-                    <input name="phone_other" value="<?php echo $phone_other ?>" type="text" class="form-control">
-                    <label>fax: </label> 
-                    <input name="phone_fax" value="<?php echo $phone_fax ?>" type="text" class="form-control">
+                    <?php
+                    if (isset($fields['_id'])) {
+                        $cntr = 0;
+                        foreach ($fields as $field => $value) {
+                            if (strpos($field, 'phone') !== false) {
+                                $cntr +=1;
+                                echo '<label>' . ucfirst($field) . ' </label>';
+                                echo '<input name="' . $field . '" class="form-control" type="text" value="' . $value . '">';
+                            }
+                        }
+                    } else {
+
+                        echo '<label> Phone </label>';
+                        echo '<input id= "phone" name="phone" class="form-control" type="text" value="" placeholder="Phone">';
+                    }
+                    ?>
 
                 </fieldset>
             </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-info">
+                        <div class="panel-heading">
+                <label><i class="fa fa-flag fa-fw"> </i>Address </label>
+            </div>
+            <div class="panel-body">
+                <fieldset <?php echo $disabled; ?> >
+                    <label> Primary</label>
+                    <div class="well">
+                        <label> Street</label>
+                        <input name="street" class="form-control" type="text" value="<?php
+                        if (isset($fields['street'])) {
+                            echo $street;
+                        }
+                        ?>">
+                        <label> City</label>
+                        <input name="city" class="form-control" type="text" value="<?php
+                        if (isset($fields['city'])) {
+                            echo $city;
+                        }
+                        ?>">
+                        <label> State</label>
+                        <input name="state" class="form-control" type="text" value="<?php
+                        if (isset($fields['state'])) {
+                            echo $state;
+                        }
+                        ?>">
+                        <label> Postal Code</label>
+                        <input name="postalcode" class="form-control" type="text" value="<?php
+                        if (isset($fields['postalcode'])) {
+                            echo $postalcode;
+                        }
+                        ?>">
+                        <label> Country</label>
+                        <input name="country" class="form-control" type="text" value="<?php
+                    if (isset($fields['country'])) {
+                        echo $country;
+                    }
+                    ?>">
+
+                    </div>
+<?php
+//                  foreach($email as $key => $value){
+//                        echo '<label>'. ucfirst($key). ' </label>';
+//                        echo '<input name="email" class="form-control" type="text" value="'.$value.'">';
+//                    }
+?>
+                </fieldset>
+            </div>
+
         </div>
 
     </div>
